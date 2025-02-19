@@ -63,7 +63,7 @@ class SpaceBoteque
         SpaceBoteque::MISSION_TYPE_HELIOPHYSICS                => 'Heliophysics',
         SpaceBoteque::MISSION_TYPE_HUMAN_EXPLORATION           => 'Human Exploration',
         SpaceBoteque::MISSION_TYPE_ROBOTIC_EXPLORATION         => 'Robotic Exploration',
-        SpaceBoteque::MISSION_TYPE_GOVERNMENT                  => 'Government / Top Secret',
+        SpaceBoteque::MISSION_TYPE_GOVERNMENT                  => 'Government/Top Secret',
         SpaceBoteque::MISSION_TYPE_TOURISM                     => 'Tourism',
         SpaceBoteque::MISSION_TYPE_UNKNOWN                     => 'Unknown',
         SpaceBoteque::MISSION_TYPE_COMMUNICATIONS              => 'Communications',
@@ -128,11 +128,11 @@ class SpaceBoteque
      */
     public static function log2file($what = null)
     {
-        $what = empty($what) ? SpaceBoteque::$error : null;
+        $what = empty($what) ? SpaceBoteque::$error : $what;
 
         if (empty($what)) return false;
 
-        $flog = __DIR__ . '/' . date('Y.m.d') . '.log';
+        $flog = mb_ereg_replace('/classes', '/', __DIR__) . date('Y.m.d') . '.log';
         $what = is_scalar($what) ? $what : json_encode($what, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
 
         return error_log(date('H:i:s') . ' : ' . $what . PHP_EOL, 3, $flog);
