@@ -160,8 +160,9 @@ class SpaceBoteque
                 SpaceBoteque::$proxies = array_merge(SpaceBoteque::$proxies, $data);
             } else {
                 SpaceBoteque::$error = new stdClass;
-                SpaceBoteque::$error->method = __METHOD__;
-                SpaceBoteque::$error->params = json_encode(['file', $url]);
+                SpaceBoteque::$error->method  = __METHOD__;
+                SpaceBoteque::$error->message = 'Invalid Response';
+                SpaceBoteque::$error->value   = $url;
             }
         }
 
@@ -204,8 +205,9 @@ class SpaceBoteque
         } else {
             # ошибки логировать только в случае запроса НЕ через прокси
             SpaceBoteque::$error = new stdClass;
-            SpaceBoteque::$error->method = __METHOD__;
-            SpaceBoteque::$error->params = json_encode(['file_get_contents', $url]);
+            SpaceBoteque::$error->method  = __METHOD__;
+            SpaceBoteque::$error->message = 'file_get_contents';
+            SpaceBoteque::$error->value   = $url;
         }
 
         return $data;
