@@ -38,13 +38,10 @@
     missionType:
     # импорт значений MISSION_TYPE
 
-    $missionTypeURL = implode([
-        SpaceBoteque::llAPI(),
-        SpaceBoteque::LL_API_URI_MISSION_TYPE,
-        '?limit=25'
-    ]);
+    $missionTypesURL  = implode([SpaceBoteque::llAPI(), SpaceBoteque::MISSION_TYPES_LLAPI_URI]);
+    $missionTypesURL .= '?' . http_build_query(SpaceBoteque::LL_API_QUERY);
 
-    $missionTypes = SpaceBoteque::requestURL($missionTypeURL);
+    $missionTypes = SpaceBoteque::requestURL($missionTypesURL);
 
     if (false === $missionTypes) {
         # запись в error.log
@@ -56,6 +53,7 @@
     ) {
         $missionTypes = $missionTypes['results'];
         $missionTypes = array_combine(array_column($missionTypes, 'id'), array_column($missionTypes, 'name'));
+
         ksort($missionTypes);
 
         if ($diffMissionTypes = array_diff($missionTypes, SpaceBoteque::$allMissionTypes)) {

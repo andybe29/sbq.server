@@ -17,3 +17,5 @@
     $sql = new simpleMySQLi($dbc);
 */
     SpaceBoteque::$currentInstance = (false !== stripos(realpath(__DIR__), SpaceBoteque::INSTANCE_DEV)) ? SpaceBoteque::INSTANCE_DEV : SpaceBoteque::INSTANCE_SBQ;
+
+    SpaceBoteque::$instancePath = __DIR__;

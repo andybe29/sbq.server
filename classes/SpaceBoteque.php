@@ -10,6 +10,11 @@ class SpaceBoteque
     static $currentInstance;
 
     /**
+     * @var string $instancePath путь к текущему инстансу
+     */
+    static $instancePath;
+
+    /**
      * @const INSTANCE_DEV dev
      * @const INSTANCE_SBQ production
      */
@@ -17,17 +22,20 @@ class SpaceBoteque
     const INSTANCE_SBQ  = 'sbq';
 
     /**
-     * @const LL_API_URL API URL в зависимости от инстанса
+     * @const LL_API_URL   API URL в зависимости от инстанса
+     * @const LL_API_QUERY параметры запроса (http_build_query)
      */
     const LL_API_URL = [
         SpaceBoteque::INSTANCE_DEV => 'https://lldev.thespacedevs.com/2.3.0',
         SpaceBoteque::INSTANCE_SBQ => 'https://ll.thespacedevs.com/2.3.0'
     ];
+    const LL_API_QUERY = ['limit' => 25, 'offset' => 0];
 
     /**
      * @const URI для получения различных сущностей
      */
-    const LL_API_URI_MISSION_TYPE = '/config/mission_types';
+    const LAUNCH_STATUSES_LLAPI_URI = LaunchStatus::LLAPI_URI;
+    const MISSION_TYPES_LLAPI_URI   = '/config/mission_types';
 
     /**
      * @const Типы миссий (все)
@@ -83,14 +91,14 @@ class SpaceBoteque
     ];
 
     public static $sbqMissionTypes = [
-        SpaceBoteque::MISSION_TYPE_EARTH_SCIENCE,
-        SpaceBoteque::MISSION_TYPE_PLANETARY_SCIENCE,
-        SpaceBoteque::MISSION_TYPE_ASTROPHYSICS,
-        SpaceBoteque::MISSION_TYPE_HELIOPHYSICS,
-        SpaceBoteque::MISSION_TYPE_ROBOTIC_EXPLORATION,
-        SpaceBoteque::MISSION_TYPE_LUNAR_EXPLORATION,
-        SpaceBoteque::MISSION_TYPE_MATERIALS_SCIENCE,
-        SpaceBoteque::MISSION_TYPE_BIOLOGY
+        SpaceBoteque::MISSION_TYPE_EARTH_SCIENCE               => 'Earth Science',
+        SpaceBoteque::MISSION_TYPE_PLANETARY_SCIENCE           => 'Planetary Science',
+        SpaceBoteque::MISSION_TYPE_ASTROPHYSICS                => 'Astrophysics',
+        SpaceBoteque::MISSION_TYPE_HELIOPHYSICS                => 'Heliophysics',
+        SpaceBoteque::MISSION_TYPE_ROBOTIC_EXPLORATION         => 'Robotic Exploration',
+        SpaceBoteque::MISSION_TYPE_LUNAR_EXPLORATION           => 'Lunar Exploration',
+        SpaceBoteque::MISSION_TYPE_MATERIALS_SCIENCE           => 'Materials Science',
+        SpaceBoteque::MISSION_TYPE_BIOLOGY                     => 'Biology',
     ];
 
     /**
@@ -132,7 +140,7 @@ class SpaceBoteque
 
         if (empty($what)) return false;
 
-        $flog = mb_ereg_replace('/classes', '/', __DIR__) . date('Y.m.d') . '.log';
+        $flog = SpaceBoteque::$instancePath . '/' . date('Y.m.d') . '.log';
         $what = is_scalar($what) ? $what : json_encode($what, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
 
         return error_log(date('H:i:s') . ' : ' . $what . PHP_EOL, 3, $flog);
