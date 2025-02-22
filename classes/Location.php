@@ -5,7 +5,7 @@
 class Location
 {
     /**
-     * @const LLAPI_URI URI для получения списка агентств
+     * @const LLAPI_URI URI для получения списка локаций
      */
     const LLAPI_URI = '/locations';
 

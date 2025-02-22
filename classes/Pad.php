@@ -5,7 +5,7 @@
 class Pad
 {
     /**
-     * @const LLAPI_URI URI для получения списка агентств
+     * @const LLAPI_URI URI для получения списка пусковых площадок
      */
     const LLAPI_URI = '/pads';
 
