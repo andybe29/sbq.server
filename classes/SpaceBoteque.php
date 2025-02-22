@@ -26,8 +26,8 @@ class SpaceBoteque
      * @const LL_API_QUERY параметры запроса (http_build_query)
      */
     const LL_API_URL = [
-        SpaceBoteque::INSTANCE_DEV => 'https://lldev.thespacedevs.com/2.3.0',
-        SpaceBoteque::INSTANCE_SBQ => 'https://ll.thespacedevs.com/2.3.0'
+        self::INSTANCE_DEV => 'https://lldev.thespacedevs.com/2.3.0',
+        self::INSTANCE_SBQ => 'https://ll.thespacedevs.com/2.3.0'
     ];
     const LL_API_QUERY = ['limit' => 25, 'offset' => 0];
 
@@ -65,40 +65,40 @@ class SpaceBoteque
     const MISSION_TYPE_SPACE_SITUATIONAL_AWARENESS = 23;
 
     public static $allMissionTypes = [
-        SpaceBoteque::MISSION_TYPE_EARTH_SCIENCE               => 'Earth Science',
-        SpaceBoteque::MISSION_TYPE_PLANETARY_SCIENCE           => 'Planetary Science',
-        SpaceBoteque::MISSION_TYPE_ASTROPHYSICS                => 'Astrophysics',
-        SpaceBoteque::MISSION_TYPE_HELIOPHYSICS                => 'Heliophysics',
-        SpaceBoteque::MISSION_TYPE_HUMAN_EXPLORATION           => 'Human Exploration',
-        SpaceBoteque::MISSION_TYPE_ROBOTIC_EXPLORATION         => 'Robotic Exploration',
-        SpaceBoteque::MISSION_TYPE_GOVERNMENT                  => 'Government/Top Secret',
-        SpaceBoteque::MISSION_TYPE_TOURISM                     => 'Tourism',
-        SpaceBoteque::MISSION_TYPE_UNKNOWN                     => 'Unknown',
-        SpaceBoteque::MISSION_TYPE_COMMUNICATIONS              => 'Communications',
-        SpaceBoteque::MISSION_TYPE_RESUPPLY                    => 'Resupply',
-        SpaceBoteque::MISSION_TYPE_SUBORBITAL                  => 'Suborbital',
-        SpaceBoteque::MISSION_TYPE_TEST_FLIGHT                 => 'Test Flight',
-        SpaceBoteque::MISSION_TYPE_DEDICATED_RIDESHARE         => 'Dedicated Rideshare',
-        SpaceBoteque::MISSION_TYPE_NAVIGATION                  => 'Navigation',
-        SpaceBoteque::MISSION_TYPE_EMPTY                       => '',
-        SpaceBoteque::MISSION_TYPE_TEST_TARGET                 => 'Test Target',
-        SpaceBoteque::MISSION_TYPE_LUNAR_EXPLORATION           => 'Lunar Exploration',
-        SpaceBoteque::MISSION_TYPE_MATERIALS_SCIENCE           => 'Materials Science',
-        SpaceBoteque::MISSION_TYPE_BIOLOGY                     => 'Biology',
-        SpaceBoteque::MISSION_TYPE_TECHNOLOGY                  => 'Technology',
-        SpaceBoteque::MISSION_TYPE_MISSION_EXTENSION           => 'Mission Extension',
-        SpaceBoteque::MISSION_TYPE_SPACE_SITUATIONAL_AWARENESS => 'Space Situational Awareness'
+        self::MISSION_TYPE_EARTH_SCIENCE               => 'Earth Science',
+        self::MISSION_TYPE_PLANETARY_SCIENCE           => 'Planetary Science',
+        self::MISSION_TYPE_ASTROPHYSICS                => 'Astrophysics',
+        self::MISSION_TYPE_HELIOPHYSICS                => 'Heliophysics',
+        self::MISSION_TYPE_HUMAN_EXPLORATION           => 'Human Exploration',
+        self::MISSION_TYPE_ROBOTIC_EXPLORATION         => 'Robotic Exploration',
+        self::MISSION_TYPE_GOVERNMENT                  => 'Government/Top Secret',
+        self::MISSION_TYPE_TOURISM                     => 'Tourism',
+        self::MISSION_TYPE_UNKNOWN                     => 'Unknown',
+        self::MISSION_TYPE_COMMUNICATIONS              => 'Communications',
+        self::MISSION_TYPE_RESUPPLY                    => 'Resupply',
+        self::MISSION_TYPE_SUBORBITAL                  => 'Suborbital',
+        self::MISSION_TYPE_TEST_FLIGHT                 => 'Test Flight',
+        self::MISSION_TYPE_DEDICATED_RIDESHARE         => 'Dedicated Rideshare',
+        self::MISSION_TYPE_NAVIGATION                  => 'Navigation',
+        self::MISSION_TYPE_EMPTY                       => '',
+        self::MISSION_TYPE_TEST_TARGET                 => 'Test Target',
+        self::MISSION_TYPE_LUNAR_EXPLORATION           => 'Lunar Exploration',
+        self::MISSION_TYPE_MATERIALS_SCIENCE           => 'Materials Science',
+        self::MISSION_TYPE_BIOLOGY                     => 'Biology',
+        self::MISSION_TYPE_TECHNOLOGY                  => 'Technology',
+        self::MISSION_TYPE_MISSION_EXTENSION           => 'Mission Extension',
+        self::MISSION_TYPE_SPACE_SITUATIONAL_AWARENESS => 'Space Situational Awareness'
     ];
 
     public static $sbqMissionTypes = [
-        SpaceBoteque::MISSION_TYPE_EARTH_SCIENCE               => 'Earth Science',
-        SpaceBoteque::MISSION_TYPE_PLANETARY_SCIENCE           => 'Planetary Science',
-        SpaceBoteque::MISSION_TYPE_ASTROPHYSICS                => 'Astrophysics',
-        SpaceBoteque::MISSION_TYPE_HELIOPHYSICS                => 'Heliophysics',
-        SpaceBoteque::MISSION_TYPE_ROBOTIC_EXPLORATION         => 'Robotic Exploration',
-        SpaceBoteque::MISSION_TYPE_LUNAR_EXPLORATION           => 'Lunar Exploration',
-        SpaceBoteque::MISSION_TYPE_MATERIALS_SCIENCE           => 'Materials Science',
-        SpaceBoteque::MISSION_TYPE_BIOLOGY                     => 'Biology',
+        self::MISSION_TYPE_EARTH_SCIENCE               => 'Earth Science',
+        self::MISSION_TYPE_PLANETARY_SCIENCE           => 'Planetary Science',
+        self::MISSION_TYPE_ASTROPHYSICS                => 'Astrophysics',
+        self::MISSION_TYPE_HELIOPHYSICS                => 'Heliophysics',
+        self::MISSION_TYPE_ROBOTIC_EXPLORATION         => 'Robotic Exploration',
+        self::MISSION_TYPE_LUNAR_EXPLORATION           => 'Lunar Exploration',
+        self::MISSION_TYPE_MATERIALS_SCIENCE           => 'Materials Science',
+        self::MISSION_TYPE_BIOLOGY                     => 'Biology',
     ];
 
     /**
@@ -113,8 +113,8 @@ class SpaceBoteque
 
     /**
      * @var array $proxies      список адресов прокси-серверов
-     * @var int   $proxiesIndex указатель на текущий индекс в SpaceBoteque::$proxies
-     * @var int   $proxiesCount кол-во записей в SpaceBoteque::$proxies
+     * @var int   $proxiesIndex указатель на текущий индекс в self::$proxies
+     * @var int   $proxiesCount кол-во записей в self::$proxies
      * @var mixed $workingProxy рабочий прокси
      */
     static $proxies      = [];
@@ -123,12 +123,17 @@ class SpaceBoteque
     static $workingProxy = null;
 
     /**
+     * @var int $requestedURLs счётчик успешно выполненных запросов
+     */
+    static $requestedURLs = 0;
+
+    /**
      * Актуальный URL LL API
      * @return string значение
      */
     public static function llAPI()
     {
-        return SpaceBoteque::LL_API_URL[SpaceBoteque::$currentInstance];
+        return self::LL_API_URL[self::$currentInstance];
     }
 
     /**
@@ -136,39 +141,39 @@ class SpaceBoteque
      */
     public static function log2file($what = null)
     {
-        $what = empty($what) ? SpaceBoteque::$error : $what;
+        $what = empty($what) ? self::$error : $what;
 
         if (empty($what)) return false;
 
-        $flog = SpaceBoteque::$instancePath . '/' . date('Y.m.d') . '.log';
+        $flog = self::$instancePath . '/' . date('Y.m.d') . '.log';
         $what = is_scalar($what) ? $what : json_encode($what, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
 
         return error_log(date('H:i:s') . ' : ' . $what . PHP_EOL, 3, $flog);
     }
 
     /**
-     * Загрузка в SpaceBoteque::$proxies адресов прокси-серверов
+     * Загрузка в self::$proxies адресов прокси-серверов
      */
     public static function proxies()
     {
-        SpaceBoteque::$error = null;
+        self::$error = null;
 
-        SpaceBoteque::$proxies = [];
+        self::$proxies = [];
 
-        foreach (SpaceBoteque::PROXIES as $url) {
+        foreach (self::PROXIES as $url) {
             if (false !== ($data = file($url, FILE_SKIP_EMPTY_LINES))) {
-                SpaceBoteque::$proxies = array_merge(SpaceBoteque::$proxies, $data);
+                self::$proxies = array_merge(self::$proxies, $data);
             } else {
-                SpaceBoteque::$error = new stdClass;
-                SpaceBoteque::$error->method  = __METHOD__;
-                SpaceBoteque::$error->message = 'Invalid Response';
-                SpaceBoteque::$error->value   = $url;
+                self::$error = new stdClass;
+                self::$error->method  = __METHOD__;
+                self::$error->message = 'Invalid Response';
+                self::$error->value   = $url;
             }
         }
 
-        SpaceBoteque::$proxiesIndex = 0;
-        SpaceBoteque::$proxiesCount = count(SpaceBoteque::$proxies);
-        SpaceBoteque::$workingProxy = null;
+        self::$proxiesIndex = 0;
+        self::$proxiesCount = count(self::$proxies);
+        self::$workingProxy = null;
 
         return;
     }
@@ -183,7 +188,7 @@ class SpaceBoteque
     {
         if (empty($url)) return false;
 
-        SpaceBoteque::$error = null;
+        self::$error = null;
 
         if ($proxy) {
             $options = [
@@ -200,14 +205,16 @@ class SpaceBoteque
 
         if (false !== ($data = file_get_contents($url, false, $context))) {
             $data = empty($data) ? [] : json_decode($data, true);
+
+            self::$requestedURLs ++;
         } else if ($proxy) {
             #
         } else {
             # ошибки логировать только в случае запроса НЕ через прокси
-            SpaceBoteque::$error = new stdClass;
-            SpaceBoteque::$error->method  = __METHOD__;
-            SpaceBoteque::$error->message = 'file_get_contents';
-            SpaceBoteque::$error->value   = $url;
+            self::$error = new stdClass;
+            self::$error->method  = __METHOD__;
+            self::$error->message = 'file_get_contents';
+            self::$error->value   = $url;
         }
 
         return $data;
@@ -220,19 +227,19 @@ class SpaceBoteque
      */
     public static function requestURLviaProxies(string $url = '')
     {
-        if (empty($url) or SpaceBoteque::$proxiesIndex >= SpaceBoteque::$proxiesCount) return false;
+        if (empty($url) or self::$proxiesIndex >= self::$proxiesCount) return false;
 
         # перебор проксей до рабочего
 
         do {
-            $proxy = SpaceBoteque::$proxies[SpaceBoteque::$proxiesIndex];
+            $proxy = self::$proxies[self::$proxiesIndex];
 
-            $data = SpaceBoteque::requestURL($url, $proxy);
+            $data = self::requestURL($url, $proxy);
 
-            SpaceBoteque::$workingProxy = (false === $data) ? null : $proxy;
+            self::$workingProxy = (false === $data) ? null : $proxy;
 
-            SpaceBoteque::$proxiesIndex ++;
-        } while (SpaceBoteque::$proxiesIndex < SpaceBoteque::$proxiesCount and empty(SpaceBoteque::$workingProxy));
+            self::$proxiesIndex ++;
+        } while (self::$proxiesIndex < self::$proxiesCount and empty(self::$workingProxy));
 
         return $data;
     }
