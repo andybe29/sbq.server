@@ -23,10 +23,10 @@ class LaunchStatus
     const COLUMN_DESCRIPTION = 'description';
 
     static $columns = [
-        LaunchStatus::COLUMN_ID,
-        LaunchStatus::COLUMN_NAME,
-        LaunchStatus::COLUMN_ABBREV,
-        LaunchStatus::COLUMN_DESCRIPTION
+        self::COLUMN_ID,
+        self::COLUMN_NAME,
+        self::COLUMN_ABBREV,
+        self::COLUMN_DESCRIPTION
     ];
 
     private $sql;
@@ -46,7 +46,7 @@ class LaunchStatus
 
     public function __get($key)
     {
-        return (isset($this->$key) and in_array($key, LaunchStatus::$columns)) ? $this->$key : null;
+        return (isset($this->$key) and in_array($key, self::$columns)) ? $this->$key : null;
     }
 
     public function __isset($key)
@@ -56,7 +56,7 @@ class LaunchStatus
 
     public function __set($key, $value)
     {
-        $this->$key = (LaunchStatus::COLUMN_ID == $key and ($value = (int)$value) > 0) ? $value : null;
+        $this->$key = (self::COLUMN_ID == $key and ($value = (int)$value) > 0) ? $value : null;
     }
 
     /**
@@ -67,13 +67,13 @@ class LaunchStatus
     {
         SpaceBoteque::$error = null;
 
-        $this->sql->str = 'SELECT * FROM ' . LaunchStatus::TABLE . ' ORDER BY ' . LaunchStatus::COLUMN_ID;
+        $this->sql->str = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::COLUMN_ID;
         $this->sql->execute();
 
         $data = $this->sql->err ? false : $this->sql->all();
         $this->sql->free();
 
-        return $data ? array_map(['LaunchStatus', '_prepare'], $data) : $data;
+        return $data ? array_map(['self', '_prepare'], $data) : $data;
     }
 
     /**
@@ -97,14 +97,14 @@ class LaunchStatus
         }
         if (SpaceBoteque::$error) return false;
 
-        $this->sql->str = 'SELECT * FROM ' . LaunchStatus::TABLE . ' WHERE ' . LaunchStatus::COLUMN_ID . ' = ' . $id;
+        $this->sql->str = 'SELECT * FROM ' . self::TABLE . ' WHERE ' . self::COLUMN_ID . ' = ' . $id;
         $this->sql->execute();
 
         if ($this->sql->err) {
             # ошибка MySQL
         } else if ($data = $this->sql->rows ? $this->sql->assoc() : []) {
 
-            $data = LaunchStatus::_prepare($data);
+            $data = self::_prepare($data);
             $this->id = $data['id'];
 
         } else {
@@ -127,7 +127,7 @@ class LaunchStatus
     {
         SpaceBoteque::$error = null;
 
-        $data = array_filter($incomeData, function($key) { return in_array($key, LaunchStatus::$columns); }, ARRAY_FILTER_USE_KEY);
+        $data = array_filter($incomeData, function($key) { return in_array($key, self::$columns); }, ARRAY_FILTER_USE_KEY);
 
         if (empty($data)) {
             SpaceBoteque::$error = new stdClass;
@@ -138,16 +138,16 @@ class LaunchStatus
         if (SpaceBoteque::$error) return false;
 
         foreach ($data as $key => $value) {
-            $data[$key] = (LaunchStatus::COLUMN_ID == $key) ? (int)$value : (mb_strlen($value) ? $this->sql->varchar($value) : 'null');
+            $data[$key] = (self::COLUMN_ID == $key) ? (int)$value : (mb_strlen($value) ? $this->sql->varchar($value) : 'null');
         }
 
-        return (false !== $this->sql->replace(LaunchStatus::TABLE, $data));
+        return (false !== $this->sql->replace(self::TABLE, $data));
     }
 
     public static function _prepare($data)
     {
         foreach ($data as $key => $value) {
-            $data[$key] = (LaunchStatus::COLUMN_ID == $key) ? (int)$value : $value;
+            $data[$key] = (self::COLUMN_ID == $key) ? (int)$value : $value;
         }
 
         return $data;
