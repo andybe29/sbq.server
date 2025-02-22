@@ -60,65 +60,28 @@ class LaunchStatus
     }
 
     /**
-     * Импорт данных
+     * Список всех записей
      * @return mixed массив данных либо false в случае фейла
      */
-    public function import()
-    {
-        $URL  = implode([SpaceBoteque::llAPI(), LaunchStatus::LLAPI_URI]);
-        $URL .= '?' . http_build_query(SpaceBoteque::LL_API_QUERY);
-
-        $launchStatuses = [];
-
-        do {
-            $response = SpaceBoteque::requestURL($URL);
-
-            if (false === $response) {
-            } else if (array_key_exists('results', $response) and is_array($response['results'])) {
-
-                $launchStatuses = array_merge($launchStatuses, $response['results']);
-                $URL            = array_key_exists('next', $response) ? $response['next'] : null;
-
-            } else {
-                SpaceBoteque::$error = new stdClass;
-                SpaceBoteque::$error->method  = __METHOD__;
-                SpaceBoteque::$error->message = 'Invalid Response for SpaceBoteque::requestURL';
-                SpaceBoteque::$error->value   = $response;
-            }
-
-            $URL = empty(SpaceBoteque::$error) ? $URL : null;
-
-        } while (!empty($URL));
-
-        return empty(SpaceBoteque::$error) ? $launchStatuses : false;
-    }
-
-    /**
-     * Создание записи
-     * @param array массив значений
-     * @return boolean результат выполнения операции
-     */
-    public function replace(array $incomeData = [])
+    public function lista()
     {
         SpaceBoteque::$error = null;
 
-        $data = array_filter($incomeData, function($key) { return in_array($key, LaunchStatus::$columns); }, ARRAY_FILTER_USE_KEY);
+        $this->sql->str = 'SELECT * FROM ' . LaunchStatus::TABLE . ' ORDER BY ' . LaunchStatus::COLUMN_ID;
+        $this->sql->execute();
 
-        if (empty($data)) {
-            SpaceBoteque::$error = new stdClass;
-            SpaceBoteque::$error->method  = __METHOD__;
-            SpaceBoteque::$error->message = 'array_filter';
-            SpaceBoteque::$error->value   = $incomeData;
-        }
-        if (SpaceBoteque::$error) return false;
+        $data = $this->sql->err ? false : $this->sql->all();
+        $this->sql->free();
 
-        foreach ($data as $key => $value) {
-            $data[$key] = (LaunchStatus::COLUMN_ID == $key) ? (int)$value : (mb_strlen($value) ? $this->sql->varchar($value) : 'null');
-        }
-
-        return (false !== $this->sql->replace(LaunchStatus::TABLE, $data));
+        return $data ? array_map(['LaunchStatus', '_prepare'], $data) : $data;
     }
 
+    /**
+     * Чтение отдельной записи
+     * @param int $incomeId id записи
+     * @return mixed запись либо false в случае фейла
+     *
+     */
     public function read(int $incomeId = 0)
     {
         $this->id = null;
@@ -155,17 +118,30 @@ class LaunchStatus
         return ($this->sql->err or SpaceBoteque::$error) ? false : $data;
     }
 
-    public function data()
+    /**
+     * Создание записи
+     * @param array $incomeData массив значений
+     * @return boolean результат выполнения операции
+     */
+    public function replace(array $incomeData = [])
     {
         SpaceBoteque::$error = null;
 
-        $this->sql->str = 'SELECT * FROM ' . LaunchStatus::TABLE . ' ORDER BY ' . LaunchStatus::COLUMN_ID;
-        $this->sql->execute();
+        $data = array_filter($incomeData, function($key) { return in_array($key, LaunchStatus::$columns); }, ARRAY_FILTER_USE_KEY);
 
-        $data = $this->sql->err ? false : $this->sql->all();
-        $this->sql->free();
+        if (empty($data)) {
+            SpaceBoteque::$error = new stdClass;
+            SpaceBoteque::$error->method  = __METHOD__;
+            SpaceBoteque::$error->message = 'array_filter';
+            SpaceBoteque::$error->value   = $incomeData;
+        }
+        if (SpaceBoteque::$error) return false;
 
-        return $data ? array_map(['LaunchStatus', '_prepare'], $data) : $data;
+        foreach ($data as $key => $value) {
+            $data[$key] = (LaunchStatus::COLUMN_ID == $key) ? (int)$value : (mb_strlen($value) ? $this->sql->varchar($value) : 'null');
+        }
+
+        return (false !== $this->sql->replace(LaunchStatus::TABLE, $data));
     }
 
     public static function _prepare($data)
