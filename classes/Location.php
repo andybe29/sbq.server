@@ -2,12 +2,12 @@
 /**
  * @author andy.bezbozhny <andy.bezbozhny@gmail.com>
  */
-class Pad
+class Location
 {
     /**
      * @const LLAPI_URI URI для получения списка агентств
      */
-    const LLAPI_URI = '/pads';
+    const LLAPI_URI = '/locations';
 
     /**
      * @const TABLE название таблицы
@@ -18,7 +18,7 @@ class Pad
      * @const COLUMN_LATITUDE    поле для latitude
      * @const COLUMN_LONGITUDE   поле для longitude
      */
-    const TABLE              = 'pads';
+    const TABLE              = 'locations';
     const COLUMN_ID          = 'id';
     const COLUMN_NAME        = 'name';
     const COLUMN_COUNTRYCODE = 'countryCode';
@@ -43,7 +43,7 @@ class Pad
     private $sql;
 
     /**
-     * @var int    $id          id пусковой площадки
+     * @var int    $id          id локации
      * @var string $name        наименование
      * @var string $countryCode код страны
      * @var string $description описание

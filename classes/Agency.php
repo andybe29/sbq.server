@@ -39,7 +39,7 @@ class Agency
     private $sql;
 
     /**
-     * @var int    $id          id статуса
+     * @var int    $id          id агентства
      * @var string $name        наименование
      * @var string $abbrev      краткое наименование
      * @var string $countryCode код страны
