@@ -7,13 +7,14 @@ class Agency
     /**
      * @const LLAPI_URI URI для получения списка агентств
      */
-    const LLAPI_URI = '/config/agencies';
+    const LLAPI_URI = '/agencies';
 
     /**
      * @const TABLE название таблицы
      * @const COLUMN_ID          поле для id
      * @const COLUMN_NAME        поле для name
      * @const COLUMN_ABBREV      поле для abbrev
+     * @const COLUMN_COUNTRYCODE поле для countryCode
      * @const COLUMN_DESCRIPTION поле для description
      */
     const TABLE              = 'agencies';
@@ -147,7 +148,7 @@ class Agency
         if (SpaceBoteque::$error) return false;
 
         foreach ($data as $key => $value) {
-            $data[$key] = (self::COLUMN_ID == $key) ? (int)$value : (mb_strlen($value) ? $this->sql->varchar($value) : 'null');
+            $data[$key] = (self::COLUMN_ID == $key) ? (int)$value : (mb_strlen($value) ? $this->sql->varchar($value) : 'NULL');
         }
 
         return (false !== $this->sql->replace(self::TABLE, $data));

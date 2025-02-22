@@ -2,31 +2,40 @@
 /**
  * @author andy.bezbozhny <andy.bezbozhny@gmail.com>
  */
-class LaunchStatus
+class Pad
 {
     /**
-     * @const LLAPI_URI URI для получения списка значений статусов пусков
+     * @const LLAPI_URI URI для получения списка агентств
      */
-    const LLAPI_URI = '/config/launch_statuses';
+    const LLAPI_URI = '/pads';
 
     /**
      * @const TABLE название таблицы
      * @const COLUMN_ID          поле для id
      * @const COLUMN_NAME        поле для name
-     * @const COLUMN_ABBREV      поле для abbrev
+     * @const COLUMN_COUNTRYCODE поле для countryCode
      * @const COLUMN_DESCRIPTION поле для description
      */
-    const TABLE              = 'launchStatuses';
+    const TABLE              = 'pads';
     const COLUMN_ID          = 'id';
     const COLUMN_NAME        = 'name';
-    const COLUMN_ABBREV      = 'abbrev';
+    const COLUMN_COUNTRYCODE = 'countryCode';
     const COLUMN_DESCRIPTION = 'description';
+    const COLUMN_LATITUDE    = 'latitude';
+    const COLUMN_LONGITUDE   = 'longitude';
 
     static $columns = [
         self::COLUMN_ID,
         self::COLUMN_NAME,
-        self::COLUMN_ABBREV,
-        self::COLUMN_DESCRIPTION
+        self::COLUMN_COUNTRYCODE,
+        self::COLUMN_DESCRIPTION,
+        self::COLUMN_LATITUDE,
+        self::COLUMN_LONGITUDE
+    ];
+
+    static $floatColumns = [
+        self::COLUMN_LATITUDE,
+        self::COLUMN_LONGITUDE
     ];
 
     private $sql;
@@ -35,7 +44,10 @@ class LaunchStatus
      * @var int    $id          id статуса
      * @var string $name        наименование
      * @var string $abbrev      краткое наименование
+     * @var string $countryCode код страны
      * @var string $description описание
+     * @var string $infoURL     ссылка на сайт агентства
+     * @var string $wikiURL     ссылка на статью в Wikipedia
      */
     private $id;
 
@@ -138,7 +150,13 @@ class LaunchStatus
         if (SpaceBoteque::$error) return false;
 
         foreach ($data as $key => $value) {
-            $data[$key] = (self::COLUMN_ID == $key) ? (int)$value : (mb_strlen($value) ? $this->sql->varchar($value) : 'NULL');
+            if (null == $value or mb_strlen($value) == 0) {
+                $data[$key] = 'NULL';
+            } else if (in_array($key, self::$floatColumns)) {
+                $data[$key] = empty($value) ? 'NULL' : $value;
+            } else {
+                $data[$key] = (self::COLUMN_ID == $key) ? (int)$value : $this->sql->varchar($value);
+            }
         }
 
         return (false !== $this->sql->replace(self::TABLE, $data));
@@ -147,7 +165,11 @@ class LaunchStatus
     public static function _prepare($data)
     {
         foreach ($data as $key => $value) {
-            $data[$key] = (self::COLUMN_ID == $key) ? (int)$value : $value;
+            if (in_array($key, self::$floatColumns)) {
+                $data[$key] = ($value === null) ? null : (float)$value;
+            } else {
+                $data[$key] = (self::COLUMN_ID == $key) ? (int)$value : $value;
+            }
         }
 
         return $data;
