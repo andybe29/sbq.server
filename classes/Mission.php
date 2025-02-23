@@ -2,40 +2,43 @@
 /**
  * @author andy.bezbozhny <andy.bezbozhny@gmail.com>
  */
-class RocketConfiguration
+class Mission
 {
-    /**
-     * @const LLAPI_URI URI для получения списка конфигураций носителей
-     */
-    const LLAPI_URI = '/config/launcher_configurations';
-
     /**
      * @const TABLE название таблицы
      * @const COLUMN_ID          поле для id
      * @const COLUMN_NAME        поле для name
-     * @const COLUMN_VARIANT     поле для variant
-     * @const COLUMN_FULLNAME    поле для fullName
+     * @const COLUMN_TYPE        поле для type
+     * @const COLUMN_DESCRIPTION поле для description
+     * @const COLUMN_LAUNCH      поле для launch
+     * @const COLUMN_ORBIT       поле для orbit
      */
-    const TABLE           = 'rocketConfigurations';
-    const COLUMN_ID       = 'id';
-    const COLUMN_NAME     = 'name';
-    const COLUMN_VARIANT  = 'variant';
-    const COLUMN_FULLNAME = 'fullName';
+    const TABLE              = 'missions';
+    const COLUMN_ID          = 'id';
+    const COLUMN_NAME        = 'name';
+    const COLUMN_TYPE        = 'type';
+    const COLUMN_DESCRIPTION = 'description';
+    const COLUMN_LAUNCH      = 'launch';
+    const COLUMN_ORBIT       = 'orbit';
 
     static $columns = [
         self::COLUMN_ID,
         self::COLUMN_NAME,
-        self::COLUMN_VARIANT,
-        self::COLUMN_FULLNAME
+        self::COLUMN_TYPE,
+        self::COLUMN_DESCRIPTION,
+        self::COLUMN_LAUNCH,
+        self::COLUMN_ORBIT
     ];
 
     private $sql;
 
     /**
-     * @var int    $id       id конфигурации носителя
-     * @var string $name     наименование
-     * @var string $variant  вариант
-     * @var string $fullName полное наименование
+     * @var int    $id          id миссии
+     * @var string $name        наименование
+     * @var string $type        тип миссии (значение из SpaceBoteque::$sbqMissionTypes)
+     * @var string $description описание
+     * @var string $launch      id пуска (launches.id)
+     * @var string $orbit       id орбиты (orbits.id)
      */
     private $id;
 

@@ -16,6 +16,8 @@ class Agency
      * @const COLUMN_ABBREV      поле для abbrev
      * @const COLUMN_COUNTRYCODE поле для countryCode
      * @const COLUMN_DESCRIPTION поле для description
+     * @const COLUMN_INFOURL     поле для infoURL
+     * @const COLUMN_WIKIURL     поле для wikiURL
      */
     const TABLE              = 'agencies';
     const COLUMN_ID          = 'id';

@@ -16,10 +16,10 @@ class Orbit
      * @const COLUMN_ABBREV      поле для abbrev
      * @const COLUMN_DESCRIPTION поле для description
      */
-    const TABLE              = 'orbits';
-    const COLUMN_ID          = 'id';
-    const COLUMN_NAME        = 'name';
-    const COLUMN_ABBREV      = 'abbrev';
+    const TABLE         = 'orbits';
+    const COLUMN_ID     = 'id';
+    const COLUMN_NAME   = 'name';
+    const COLUMN_ABBREV = 'abbrev';
 
     static $columns = [
         self::COLUMN_ID,
@@ -30,9 +30,9 @@ class Orbit
     private $sql;
 
     /**
-     * @var int    $id          id орбиты
-     * @var string $name        наименование
-     * @var string $abbrev      краткое наименование
+     * @var int    $id     id орбиты
+     * @var string $name   наименование
+     * @var string $abbrev краткое наименование
      */
     private $id;
 
