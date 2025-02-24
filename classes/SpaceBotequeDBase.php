@@ -12,26 +12,32 @@ class SpaceBotequeDBase
      * @const TABLE_LAUNCHES              пуски
      * @const TABLE_LOCATIONS             локации пусковых площадок
      * @const TABLE_MISSIONS              миссии
-     * @const TABLE_MISSIONS2AGENCIES     миссии и агентства
      * @const TABLE_ORBITS                целевые орбиты
      * @const TABLE_PADS                  пусковые площадки
-     * @const TABLE_PADS2AGENCIES         пусковые площадки и агентства
      * @const TABLE_ROCKET_CONFIGURATIONS конфигурации ракет
+     *
+     * @const TABLE_MISSIONS2AGENCIES     миссии и агентства
+     * @const TABLE_PADS2AGENCIES         пусковые площадки и агентства
      */
     const TABLE_AGENCIES              = 'agencies';
     const TABLE_LAUNCH_STATUSES       = 'launchStatuses';
     const TABLE_LAUNCHES              = 'launches';
     const TABLE_LOCATIONS             = 'locations';
     const TABLE_MISSIONS              = 'missions';
-    const TABLE_MISSIONS2AGENCIES     = 'missions2agencies';
     const TABLE_ORBITS                = 'orbits';
     const TABLE_PADS                  = 'pads';
-    const TABLE_PADS2AGENCIES         = 'pads2agencies';
     const TABLE_ROCKET_CONFIGURATIONS = 'rocketConfigurations';
 
+    const TABLE_MISSIONS2AGENCIES     = 'missions2agencies';
+    const TABLE_PADS2AGENCIES         = 'pads2agencies';
+
+    /**
+     * Таблицы сущностей
+     */
     const TABLES = [
         self::TABLE_AGENCIES,
         self::TABLE_LAUNCH_STATUSES,
+        self::TABLE_LAUNCHES,
         self::TABLE_LOCATIONS,
         self::TABLE_MISSIONS,
         self::TABLE_ORBITS,
@@ -43,17 +49,23 @@ class SpaceBotequeDBase
      * наименования полей
      */
     const COLUMN_ABBREV      = 'abbrev';
+    const COLUMN_COUNTRYCODE = 'countryCode';
     const COLUMN_DESCRIPTION = 'description';
     const COLUMN_ID          = 'id';
+    const COLUMN_INFOURL     = 'infoURL';
     const COLUMN_NAME        = 'name';
     const COLUMN_UUID        = 'uuid';
+    const COLUMN_WIKIURL     = 'wikiURL';
 
     const COLUMNS = [
         self::COLUMN_ABBREV,
+        self::COLUMN_COUNTRYCODE,
         self::COLUMN_DESCRIPTION,
         self::COLUMN_ID,
+        self::COLUMN_INFOURL,
         self::COLUMN_NAME,
         self::COLUMN_UUID,
+        self::COLUMN_WIKIURL
     ];
 
     /**
@@ -66,49 +78,33 @@ class SpaceBotequeDBase
 
     const COLUMN_TYPES = [
         self::COLUMN_ABBREV         => self::COLUMN_TYPE_STRING,
+        self::COLUMN_COUNTRYCODE    => self::COLUMN_TYPE_STRING,
         self::COLUMN_DESCRIPTION    => self::COLUMN_TYPE_STRING,
         self::COLUMN_ID             => self::COLUMN_TYPE_INT,
+        self::COLUMN_INFOURL        => self::COLUMN_TYPE_STRING,
         self::COLUMN_NAME           => self::COLUMN_TYPE_STRING,
         self::COLUMN_UUID           => self::COLUMN_TYPE_STRING,
+        self::COLUMN_WIKIURL        => self::COLUMN_TYPE_STRING
     ];
 
     /**
      * таблицы и поля
      */
     const TABLES_COLUMNS = [
-        self::TABLE_AGENCIES => [
-        ],
-
-        self::TABLE_LAUNCHES => [
-        ],
-
-        self::TABLE_LAUNCH_STATUSES => [
-            self::COLUMN_ID,
-            self::COLUMN_NAME,
-            self::COLUMN_ABBREV,
-            self::COLUMN_DESCRIPTION,
-        ],
-
-        self::TABLE_LOCATIONS => [
-        ],
-
-        self::TABLE_MISSIONS => [
-        ],
+        self::TABLE_AGENCIES              => Agency::TABLE_COLUMNS,
+#        self::TABLE_LAUNCHES              => Launch::TABLE_COLUMNS,
+        self::TABLE_LAUNCH_STATUSES       => LaunchStatus::TABLE_COLUMNS,
+#        self::TABLE_LOCATIONS             => Location::TABLE_COLUMNS,
+#        self::TABLE_MISSIONS              => Mission::TABLE_COLUMNS,
+#        self::TABLE_ORBITS                => Orbit::TABLE_COLUMNS,
+#        self::TABLE_PADS                  => Pad::TABLE_COLUMNS,
+#        self::TABLE_ROCKET_CONFIGURATIONS => RocketConfiguration::TABLE_COLUMNS,
 
         self::TABLE_MISSIONS2AGENCIES => [
         ],
 
-        self::TABLE_ORBITS => [
-        ],
-
-        self::TABLE_PADS => [
-        ],
-
         self::TABLE_PADS2AGENCIES => [
         ],
-
-        self::TABLE_ROCKET_CONFIGURATIONS => [
-        ]
     ];
 
     /**

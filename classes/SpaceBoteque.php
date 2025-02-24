@@ -211,7 +211,7 @@ class SpaceBoteque
      * Актуальный URL LL API
      * @return string значение
      */
-    public static function llAPI()
+    public static function getCurrentAPIURL()
     {
         return self::LL_API_URL[self::$currentInstance];
     }
@@ -225,7 +225,7 @@ class SpaceBoteque
 
         if (empty($what)) return false;
 
-        $flog = self::$instancePath . '/' . date('Y.m.d') . '.log';
+        $flog = self::$instancePath . '/tmp/' . date('Y.m.d') . '.log';
         $what = is_scalar($what) ? $what : json_encode($what, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
 
         return error_log(date('H:i:s') . ' : ' . $what . PHP_EOL, 3, $flog);
