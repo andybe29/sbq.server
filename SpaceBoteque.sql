@@ -71,6 +71,42 @@ CREATE TABLE `locations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `missions`
+--
+
+DROP TABLE IF EXISTS `missions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `missions` (
+  `id` int(10) unsigned NOT NULL,
+  `name` varchar(1024) DEFAULT NULL,
+  `type` tinyint(3) unsigned DEFAULT NULL,
+  `description` varchar(2048) DEFAULT NULL,
+  `launch` varchar(36) DEFAULT NULL,
+  `orbit` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `type` (`type`),
+  KEY `launch` (`launch`),
+  KEY `orbit` (`orbit`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `missions2agencies`
+--
+
+DROP TABLE IF EXISTS `missions2agencies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `missions2agencies` (
+  `mission` int(10) unsigned DEFAULT NULL,
+  `agency` int(10) unsigned DEFAULT NULL,
+  KEY `agency` (`agency`),
+  KEY `mission` (`mission`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `orbits`
 --
 
@@ -144,4 +180,4 @@ CREATE TABLE `rocketConfigurations` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-22 22:46:11
+-- Dump completed on 2025-02-24 20:08:36
