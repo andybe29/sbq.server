@@ -27,7 +27,6 @@ class SpaceBoteque
         self::INSTANCE_DEV => 'https://lldev.thespacedevs.com/2.3.0',
         self::INSTANCE_SBQ => 'https://ll.thespacedevs.com/2.3.0'
     ];
-    const LL_API_QUERY = ['limit' => 25, 'offset' => 0];
 
     /**
      * @var int $requestedURLs счётчик успешно выполненных запросов
