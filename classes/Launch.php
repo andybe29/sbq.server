@@ -2,6 +2,6 @@
 /**
  * @author andy.bezbozhny <andy.bezbozhny@gmail.com>
  */
-class Mission
+class Launch
 {
 }
