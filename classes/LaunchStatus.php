@@ -18,11 +18,11 @@ class LaunchStatus extends SpaceBoteque
 
     /**
      * Список всех записей
-     * @return mixed массив данных либо false в случае фейла
+     * @return mixed массив записей либо false в случае фейла
      */
     public function all()
     {
-        return $this->_all(SpaceBotequeDBase::TABLE_LAUNCH_STATUSES, SpaceBotequeDBase::COLUMN_ID);
+        return $this->_all(self::TABLE, SpaceBotequeDBase::COLUMN_ID);
     }
 
     /**
@@ -33,7 +33,7 @@ class LaunchStatus extends SpaceBoteque
      */
     public function read(int $incomeId = 0)
     {
-        return $this->_read(SpaceBotequeDBase::TABLE_LAUNCH_STATUSES, SpaceBotequeDBase::COLUMN_ID, $incomeId);
+        return $this->_read(self::TABLE, SpaceBotequeDBase::COLUMN_ID, $incomeId);
     }
 
     /**
@@ -43,7 +43,7 @@ class LaunchStatus extends SpaceBoteque
      */
     public function replace(array $incomeData = [])
     {
-        return $this->_replace(SpaceBotequeDBase::TABLE_LAUNCH_STATUSES, $incomeData);
+        return $this->_replace(self::TABLE, $incomeData);
     }
 
 }
