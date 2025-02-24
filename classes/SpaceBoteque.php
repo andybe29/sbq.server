@@ -6,20 +6,18 @@ class SpaceBoteque
 {
     /**
      * @var string $currentInstance значение текущего инстанса
+     * @var string $instancePath путь к текущему инстансу
+     * значения определяются в config.php
      */
     static $currentInstance;
-
-    /**
-     * @var string $instancePath путь к текущему инстансу
-     */
     static $instancePath;
 
     /**
      * @const INSTANCE_DEV dev
      * @const INSTANCE_SBQ production
      */
-    const INSTANCE_DEV  = 'dev';
-    const INSTANCE_SBQ  = 'sbq';
+    const INSTANCE_DEV = 'dev';
+    const INSTANCE_SBQ = 'sbq';
 
     /**
      * @const LL_API_URL   API URL в зависимости от инстанса
@@ -32,100 +30,182 @@ class SpaceBoteque
     const LL_API_QUERY = ['limit' => 25, 'offset' => 0];
 
     /**
-     * @const URI для получения различных сущностей
-     */
-    const LAUNCH_STATUSES_LLAPI_URI = LaunchStatus::LLAPI_URI;
-    const MISSION_TYPES_LLAPI_URI   = '/config/mission_types';
-
-    /**
-     * @const Типы миссий (все)
-     */
-    const MISSION_TYPE_EARTH_SCIENCE               =  1;
-    const MISSION_TYPE_PLANETARY_SCIENCE           =  2;
-    const MISSION_TYPE_ASTROPHYSICS                =  3;
-    const MISSION_TYPE_HELIOPHYSICS                =  4;
-    const MISSION_TYPE_HUMAN_EXPLORATION           =  5;
-    const MISSION_TYPE_ROBOTIC_EXPLORATION         =  6;
-    const MISSION_TYPE_GOVERNMENT                  =  7;
-    const MISSION_TYPE_TOURISM                     =  8;
-    const MISSION_TYPE_UNKNOWN                     =  9;
-    const MISSION_TYPE_COMMUNICATIONS              = 10;
-    const MISSION_TYPE_RESUPPLY                    = 11;
-    const MISSION_TYPE_SUBORBITAL                  = 12;
-    const MISSION_TYPE_TEST_FLIGHT                 = 13;
-    const MISSION_TYPE_DEDICATED_RIDESHARE         = 14;
-    const MISSION_TYPE_NAVIGATION                  = 15;
-    const MISSION_TYPE_EMPTY                       = 16;
-    const MISSION_TYPE_TEST_TARGET                 = 17;
-    const MISSION_TYPE_LUNAR_EXPLORATION           = 18;
-    const MISSION_TYPE_MATERIALS_SCIENCE           = 19;
-    const MISSION_TYPE_BIOLOGY                     = 20;
-    const MISSION_TYPE_TECHNOLOGY                  = 21;
-    const MISSION_TYPE_MISSION_EXTENSION           = 22;
-    const MISSION_TYPE_SPACE_SITUATIONAL_AWARENESS = 23;
-
-    public static $allMissionTypes = [
-        self::MISSION_TYPE_EARTH_SCIENCE               => 'Earth Science',
-        self::MISSION_TYPE_PLANETARY_SCIENCE           => 'Planetary Science',
-        self::MISSION_TYPE_ASTROPHYSICS                => 'Astrophysics',
-        self::MISSION_TYPE_HELIOPHYSICS                => 'Heliophysics',
-        self::MISSION_TYPE_HUMAN_EXPLORATION           => 'Human Exploration',
-        self::MISSION_TYPE_ROBOTIC_EXPLORATION         => 'Robotic Exploration',
-        self::MISSION_TYPE_GOVERNMENT                  => 'Government/Top Secret',
-        self::MISSION_TYPE_TOURISM                     => 'Tourism',
-        self::MISSION_TYPE_UNKNOWN                     => 'Unknown',
-        self::MISSION_TYPE_COMMUNICATIONS              => 'Communications',
-        self::MISSION_TYPE_RESUPPLY                    => 'Resupply',
-        self::MISSION_TYPE_SUBORBITAL                  => 'Suborbital',
-        self::MISSION_TYPE_TEST_FLIGHT                 => 'Test Flight',
-        self::MISSION_TYPE_DEDICATED_RIDESHARE         => 'Dedicated Rideshare',
-        self::MISSION_TYPE_NAVIGATION                  => 'Navigation',
-        self::MISSION_TYPE_EMPTY                       => '',
-        self::MISSION_TYPE_TEST_TARGET                 => 'Test Target',
-        self::MISSION_TYPE_LUNAR_EXPLORATION           => 'Lunar Exploration',
-        self::MISSION_TYPE_MATERIALS_SCIENCE           => 'Materials Science',
-        self::MISSION_TYPE_BIOLOGY                     => 'Biology',
-        self::MISSION_TYPE_TECHNOLOGY                  => 'Technology',
-        self::MISSION_TYPE_MISSION_EXTENSION           => 'Mission Extension',
-        self::MISSION_TYPE_SPACE_SITUATIONAL_AWARENESS => 'Space Situational Awareness'
-    ];
-
-    public static $sbqMissionTypes = [
-        self::MISSION_TYPE_EARTH_SCIENCE               => 'Earth Science',
-        self::MISSION_TYPE_PLANETARY_SCIENCE           => 'Planetary Science',
-        self::MISSION_TYPE_ASTROPHYSICS                => 'Astrophysics',
-        self::MISSION_TYPE_HELIOPHYSICS                => 'Heliophysics',
-        self::MISSION_TYPE_ROBOTIC_EXPLORATION         => 'Robotic Exploration',
-        self::MISSION_TYPE_LUNAR_EXPLORATION           => 'Lunar Exploration',
-        self::MISSION_TYPE_MATERIALS_SCIENCE           => 'Materials Science',
-        self::MISSION_TYPE_BIOLOGY                     => 'Biology',
-    ];
-
-    /**
-     * @const PROXIES список URL со списками IP прокси
-     **/
-    const PROXIES = [
-#        'http://api.foxtools.ru/v2/Proxy.txt',
-        'https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt'
-    ];
-
-    static $error = null;
-
-    /**
-     * @var array $proxies      список адресов прокси-серверов
-     * @var int   $proxiesIndex указатель на текущий индекс в self::$proxies
-     * @var int   $proxiesCount кол-во записей в self::$proxies
-     * @var mixed $workingProxy рабочий прокси
-     */
-    static $proxies      = [];
-    static $proxiesIndex = 0;
-    static $proxiesCount = 0;
-    static $workingProxy = null;
-
-    /**
      * @var int $requestedURLs счётчик успешно выполненных запросов
      */
     static $requestedURLs = 0;
+
+    static $error = null;
+
+    private $id, $uuid;
+    private $sql;
+
+    protected function __construct($sql)
+    {
+        $this->sql = $sql;
+    }
+
+    public function __get($key)
+    {
+        return isset($this->$key) ? $this->$key : null;
+    }
+
+    public function __isset($key)
+    {
+        return isset($this->$key);
+    }
+
+    public function __set($key, $value)
+    {
+        switch ($key) {
+            case SpaceBotequeDBase::COLUMN_ID: {
+                $this->$key = (($value = (int)$value) > 0) ? $value : null;
+                break;
+            }
+
+            case SpaceBotequeDBase::COLUMN_UUID: {
+                $this->$key = $value;
+            }
+
+            default: {
+                $this->$key = null;
+                break;
+            }
+        }
+    }
+
+    /**
+     * Список всех записей
+     * @param string $table  наименование таблицы из SpaceBotequeDBase::TABLES
+     * @param string $column наименование поля из SpaceBotequeDBase::COLUMNS, по которому следует произвести сортировку
+     * @param string $dir    направление сортировки
+     * @return mixed массив данных либо false в случае фейла
+     */
+    protected function _all(
+        string $table = '',
+        string $column = SpaceBotequeDBase::COLUMN_ID,
+        string $dir = 'ASC'
+    )
+    {
+        self::$error = null;
+
+        if (SpaceBotequeDBase::tableColumning($table, $column)) {
+            $dir = in_array($dir = strUtils::str2upper($dir), ['ASC', 'DESC']) ? $dir : 'ASC';
+        } else {
+            self::$error = new stdClass;
+            self::$error->method  = __METHOD__;
+            self::$error->message = 'Invalid Params';
+            self::$error->values  = ['table' => $table, 'column' => $column];
+        }
+        if (self::$error) return false;
+
+        $this->sql->str = 'SELECT * FROM ' . $table . ' ORDER BY ' . $column . ' ' . $dir;
+        $this->sql->execute();
+
+        $data = $this->sql->err ? false : $this->sql->all();
+        $this->sql->free();
+
+        return $data ? array_map(['SpaceBotequeDBase', 'typeCasting'], $data) : $data;
+    }
+
+    /**
+     * Чтение отдельной записи
+     * @param string $table   наименование таблицы из SpaceBotequeDBase::TABLES
+     * @param string $column  наименование поля из набора [SpaceBotequeDBase::COLUMN_ID, SpaceBotequeDBase::COLUMN_UUID]
+     * @param mixed  $idValue значение id/uuid записи
+     * @return mixed запись либо false в случае фейла
+     *
+     */
+    public function _read(
+        string $table = '',
+        string $column = SpaceBotequeDBase::COLUMN_ID,
+        $idValue = 0
+    )
+    {
+        self::$error = null;
+
+        if (
+            SpaceBotequeDBase::tableColumning($table, $column)
+            and (
+                (SpaceBotequeDBase::COLUMN_ID == $column and ($id = (int)$idValue) >= 0)
+                or
+                (SpaceBotequeDBase::COLUMN_UUID == $column and mb_strlen($id = (string)$idValue))
+            )
+        ) {
+            # ok
+            $id = (SpaceBotequeDBase::COLUMN_UUID == $column) ? $this->sql->varchar($id) : $id;
+        } else {
+            self::$error = new stdClass;
+            self::$error->method  = __METHOD__;
+            self::$error->message = 'Invalid Params';
+            self::$error->values  = ['table' => $table, 'column' => $column, 'id' => $idValue];
+        }
+        if (self::$error) return false;
+
+        $this->sql->str = 'SELECT * FROM ' . $table . ' WHERE ' . $column . ' = ' . $id;
+        $this->sql->execute();
+
+        if ($this->sql->err) {
+            # ошибка MySQL
+        } else if ($data = $this->sql->rows ? $this->sql->assoc() : []) {
+            # ok
+            $data = SpaceBotequeDBase::typeCasting($data);
+        } else {
+            self::$error = new stdClass;
+            self::$error->method  = __METHOD__;
+            self::$error->message = 'Record Not Found';
+            self::$error->values  = ['table' => $table, 'column' => $column, 'id' => $idValue];
+        }
+        $this->sql->free();
+
+        return ($this->sql->err or self::$error) ? false : $data;
+    }
+
+    /**
+     * Создание / Обновление записи
+     * @param string $incomeTable наименование таблицы из SpaceBotequeDBase::TABLES
+     * @param array  $incomeData  массив значений
+     * @return boolean результат выполнения операции
+     */
+    public function _replace(
+        string $incomeTable = '',
+        array  $incomeData = []
+    )
+    {
+        SpaceBoteque::$error = null;
+
+        $data = array_filter($incomeData, function($column) use ($incomeTable) {
+            return SpaceBotequeDBase::tableColumning($incomeTable, $column);
+        }, ARRAY_FILTER_USE_KEY);
+
+        if (empty($data)) {
+            SpaceBoteque::$error = new stdClass;
+            SpaceBoteque::$error->method  = __METHOD__;
+            SpaceBoteque::$error->message = 'array_filter';
+            SpaceBoteque::$error->values  = $incomeData;
+        }
+        if (SpaceBoteque::$error) return false;
+
+        $data = SpaceBotequeDBase::typeCasting($data);
+
+        foreach ($data as $column => $value) {
+            switch (SpaceBotequeDBase::COLUMN_TYPES[$column]) {
+                case SpaceBotequeDBase::COLUMN_TYPE_DTIME:
+                case SpaceBotequeDBase::COLUMN_TYPE_STRING: {
+                    $data[$column] = $this->sql->varchar($value);
+                    break;
+                }
+
+                case SpaceBotequeDBase::COLUMN_TYPE_FLOAT:
+                case SpaceBotequeDBase::COLUMN_TYPE_INT:
+                default: {
+                    # ничего не делать
+                    break;
+                }
+            }
+        }
+
+        return (false !== $this->sql->replace($incomeTable, $data));
+    }
 
     /**
      * Актуальный URL LL API
@@ -149,33 +229,6 @@ class SpaceBoteque
         $what = is_scalar($what) ? $what : json_encode($what, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
 
         return error_log(date('H:i:s') . ' : ' . $what . PHP_EOL, 3, $flog);
-    }
-
-    /**
-     * Загрузка в self::$proxies адресов прокси-серверов
-     */
-    public static function proxies()
-    {
-        self::$error = null;
-
-        self::$proxies = [];
-
-        foreach (self::PROXIES as $url) {
-            if (false !== ($data = file($url, FILE_SKIP_EMPTY_LINES))) {
-                self::$proxies = array_merge(self::$proxies, $data);
-            } else {
-                self::$error = new stdClass;
-                self::$error->method  = __METHOD__;
-                self::$error->message = 'Invalid Response';
-                self::$error->value   = $url;
-            }
-        }
-
-        self::$proxiesIndex = 0;
-        self::$proxiesCount = count(self::$proxies);
-        self::$workingProxy = null;
-
-        return;
     }
 
     /**
@@ -216,30 +269,6 @@ class SpaceBoteque
             self::$error->message = 'file_get_contents';
             self::$error->value   = $url;
         }
-
-        return $data;
-    }
-
-    /**
-     * Выполнение запроса через перебор адресов прокси-серверов
-     * @param string  $url   URL
-     * @return mixed содержимое URL либо false в случае фейла
-     */
-    public static function requestURLviaProxies(string $url = '')
-    {
-        if (empty($url) or self::$proxiesIndex >= self::$proxiesCount) return false;
-
-        # перебор проксей до рабочего
-
-        do {
-            $proxy = self::$proxies[self::$proxiesIndex];
-
-            $data = self::requestURL($url, $proxy);
-
-            self::$workingProxy = (false === $data) ? null : $proxy;
-
-            self::$proxiesIndex ++;
-        } while (self::$proxiesIndex < self::$proxiesCount and empty(self::$workingProxy));
 
         return $data;
     }

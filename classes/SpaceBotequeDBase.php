@@ -117,7 +117,7 @@ class SpaceBotequeDBase
      * @param string $column наименование поля
      * @return результат проверки
      */
-    public static tableColumning(string $table, string $column)
+    public static function tableColumning(string $table, string $column)
     {
         return (
             in_array($table, self::TABLES)
