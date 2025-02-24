@@ -1,15 +1,23 @@
 <?php
 /**
+ * Статусы пусков
  * @author andy.bezbozhny <andy.bezbozhny@gmail.com>
  */
 class LaunchStatus extends SpaceBoteque
 {
     /**
-     * @const LLAPI_URI URI для получения списка значений статусов пусков
-     * @const TABLE     наименование таблицы
+     * @const LLAPI_URI     URI для получения списка значений
+     * @const TABLE         наименование таблицы сущности
+     * @const TABLE_COLUMNS список полей в таблице сущности
      */
-    const LLAPI_URI = '/config/launch_statuses';
-    const TABLE     = SpaceBotequeDBase::TABLE_LAUNCH_STATUSES;
+    const LLAPI_URI     = '/config/launch_statuses';
+    const TABLE         = SpaceBotequeDBase::TABLE_LAUNCH_STATUSES;
+    const TABLE_COLUMNS = [
+        SpaceBotequeDBase::COLUMN_ID,
+        SpaceBotequeDBase::COLUMN_NAME,
+        SpaceBotequeDBase::COLUMN_ABBREV,
+        SpaceBotequeDBase::COLUMN_DESCRIPTION
+    ];
 
     public function __construct($sql)
     {
