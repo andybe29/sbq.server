@@ -57,4 +57,24 @@ class Agency extends SpaceBotequeDBase
         return $this->_replace(self::TABLE, $incomeData);
     }
 
+    /**
+     * Парсинг ноды из mission.agencies
+     * @param array массив ноды
+     * @return mixed массив с данными для self::replace либо false
+     */
+    public static function parse(array $node = [])
+    {
+        if (empty($node)) return false;
+
+        return [
+            parent::COLUMN_ID          => $node['id'],
+            parent::COLUMN_NAME        => $node['name'],
+            parent::COLUMN_ABBREV      => $node['abbrev'],
+            parent::COLUMN_COUNTRYCODE => $node['country'][0]['alpha_3_code'],
+            parent::COLUMN_DESCRIPTION => $node['description'],
+            parent::COLUMN_INFOURL     => mb_ereg_replace('http:', 'https:', $node['info_url']),
+            parent::COLUMN_WIKIURL     => mb_ereg_replace('http:', 'https:', $node['wiki_url'])
+        ];
+
+    }
 }

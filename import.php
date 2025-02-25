@@ -34,10 +34,8 @@
 
     $unknownMissionTypes = [];
 
-    $agency         = new Agency($sql);
-
-    $launchStatus   = new LaunchStatus($sql);
-    $launchStatuses = ($launchStatuses = $launchStatus->all()) ? array_column($launchStatuses, 'id') : [];
+    $agency       = new Agency($sql);
+    $launchStatus = new LaunchStatus($sql);
 
     do {
         $url = $requestURL . '?' . http_build_query($query);
@@ -58,8 +56,19 @@
                     if (file_exists($flog)) {
                         unlink($flog);
                     }
+
                     error_log($json, 3, $flog);
 
+                    # agencies
+                    foreach ($currentMissionNode['agencies'] as $currentAgencyNode) {
+                        $agency->replace(Agency::parse($currentAgencyNode));
+                    }
+
+                    # orbit
+
+
+                    # status
+                    $launchStatus->replace((array)$currentLaunchNode['status']);
 
                 } else if (!in_array($currentMissionNode['type'], MissionType::MISSION_TYPES_ALL)) {
                     # unknown Mission Type
@@ -74,7 +83,7 @@
 
         $query['offset'] += $query['limit'];
 
-    } while (empty(SpaceBoteque::$error) and !empty($response['next']));
+    } while (false and empty(SpaceBoteque::$error) and !empty($response['next']));
 
     if ($unknownMissionTypes) {
         $unknownMissionTypes = array_unique($unknownMissionTypes);

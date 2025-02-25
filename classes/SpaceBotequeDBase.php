@@ -262,7 +262,7 @@ class SpaceBotequeDBase
             switch (self::COLUMN_TYPES[$column]) {
                 case self::COLUMN_TYPE_DTIME:
                 case self::COLUMN_TYPE_STRING: {
-                    $data[$column] = $this->sql->varchar($value);
+                    $data[$column] = empty($value) ? 'NULL' : $this->sql->varchar($value);
                     break;
                 }
 
