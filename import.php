@@ -54,7 +54,11 @@
                     # to process
                     $json = json_encode($currentLaunchNode, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
                     $flog = SpaceBoteque::$instancePath . '/tmp/' . $currentLaunchNode['id'] . '.json';
-                    error_log($json, 0, $flog);
+
+                    if (file_exists($flog)) {
+                        unlink($flog);
+                    }
+                    error_log($json, 3, $flog);
 
 
                 } else if (!in_array($currentMissionNode['type'], MissionType::MISSION_TYPES_ALL)) {

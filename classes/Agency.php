@@ -3,7 +3,7 @@
  * Агенства / Операторы пусков и миссий
  * @author andy.bezbozhny <andy.bezbozhny@gmail.com>
  */
-class Agency extends SpaceBoteque
+class Agency extends SpaceBotequeDBase
 {
     /**
      * @const LLAPI_URI     URI для получения списка значений
@@ -11,15 +11,15 @@ class Agency extends SpaceBoteque
      * @const TABLE_COLUMNS список полей в таблице сущности
      */
     const LLAPI_URI = '/agencies';
-    const TABLE     = SpaceBotequeDBase::TABLE_AGENCIES;
+    const TABLE     = parent::TABLE_AGENCIES;
     const TABLE_COLUMNS = [
-        SpaceBotequeDBase::COLUMN_ID,
-        SpaceBotequeDBase::COLUMN_NAME,
-        SpaceBotequeDBase::COLUMN_ABBREV,
-        SpaceBotequeDBase::COLUMN_COUNTRYCODE,
-        SpaceBotequeDBase::COLUMN_DESCRIPTION,
-        SpaceBotequeDBase::COLUMN_INFOURL,
-        SpaceBotequeDBase::COLUMN_WIKIURL
+        parent::COLUMN_ID,
+        parent::COLUMN_NAME,
+        parent::COLUMN_ABBREV,
+        parent::COLUMN_COUNTRYCODE,
+        parent::COLUMN_DESCRIPTION,
+        parent::COLUMN_INFOURL,
+        parent::COLUMN_WIKIURL
     ];
 
     public function __construct($sql)
@@ -33,7 +33,7 @@ class Agency extends SpaceBoteque
      */
     public function all()
     {
-        return $this->_all(self::TABLE, SpaceBotequeDBase::COLUMN_ID);
+        return $this->_all(self::TABLE, parent::COLUMN_ID);
     }
 
     /**
@@ -44,7 +44,7 @@ class Agency extends SpaceBoteque
      */
     public function read(int $incomeId = 0)
     {
-        return $this->_read(self::TABLE, SpaceBotequeDBase::COLUMN_ID, $incomeId);
+        return $this->_read(self::TABLE, parent::COLUMN_ID, $incomeId);
     }
 
     /**

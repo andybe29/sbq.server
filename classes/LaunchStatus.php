@@ -3,7 +3,7 @@
  * Статусы пусков
  * @author andy.bezbozhny <andy.bezbozhny@gmail.com>
  */
-class LaunchStatus extends SpaceBoteque
+class LaunchStatus extends SpaceBotequeDBase
 {
     /**
      * @const LLAPI_URI     URI для получения списка значений
@@ -11,12 +11,12 @@ class LaunchStatus extends SpaceBoteque
      * @const TABLE_COLUMNS список полей в таблице сущности
      */
     const LLAPI_URI     = '/config/launch_statuses/';
-    const TABLE         = SpaceBotequeDBase::TABLE_LAUNCH_STATUSES;
+    const TABLE         = parent::TABLE_LAUNCH_STATUSES;
     const TABLE_COLUMNS = [
-        SpaceBotequeDBase::COLUMN_ID,
-        SpaceBotequeDBase::COLUMN_NAME,
-        SpaceBotequeDBase::COLUMN_ABBREV,
-        SpaceBotequeDBase::COLUMN_DESCRIPTION
+        parent::COLUMN_ID,
+        parent::COLUMN_NAME,
+        parent::COLUMN_ABBREV,
+        parent::COLUMN_DESCRIPTION
     ];
 
     public function __construct($sql)
@@ -30,7 +30,7 @@ class LaunchStatus extends SpaceBoteque
      */
     public function all()
     {
-        return $this->_all(self::TABLE, SpaceBotequeDBase::COLUMN_ID);
+        return $this->_all(self::TABLE, parent::COLUMN_ID);
     }
 
     /**
@@ -41,7 +41,7 @@ class LaunchStatus extends SpaceBoteque
      */
     public function read(int $incomeId = 0)
     {
-        return $this->_read(self::TABLE, SpaceBotequeDBase::COLUMN_ID, $incomeId);
+        return $this->_read(self::TABLE, parent::COLUMN_ID, $incomeId);
     }
 
     /**
