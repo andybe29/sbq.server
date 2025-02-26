@@ -49,24 +49,28 @@ class SpaceBotequeDBase
      * наименования полей
      */
     const COLUMN_ABBREV      = 'abbrev';
+    const COLUMN_AGENCY      = 'agency'; # agencies.id
     const COLUMN_COUNTRYCODE = 'countryCode';
     const COLUMN_DESCRIPTION = 'description';
     const COLUMN_ID          = 'id';
     const COLUMN_INFOURL     = 'infoURL';
     const COLUMN_LATITUDE    = 'latitude';
     const COLUMN_LONGITUDE   = 'longitude';
+    const COLUMN_MISSION     = 'mission'; # missions.id
     const COLUMN_NAME        = 'name';
     const COLUMN_UUID        = 'uuid';
     const COLUMN_WIKIURL     = 'wikiURL';
 
     const COLUMNS = [
         self::COLUMN_ABBREV,
+        self::COLUMN_AGENCY,
         self::COLUMN_COUNTRYCODE,
         self::COLUMN_DESCRIPTION,
         self::COLUMN_ID,
         self::COLUMN_INFOURL,
         self::COLUMN_LATITUDE,
         self::COLUMN_LONGITUDE,
+        self::COLUMN_MISSION,
         self::COLUMN_NAME,
         self::COLUMN_UUID,
         self::COLUMN_WIKIURL
@@ -82,12 +86,14 @@ class SpaceBotequeDBase
 
     const COLUMN_TYPES = [
         self::COLUMN_ABBREV         => self::COLUMN_TYPE_STRING,
+        self::COLUMN_AGENCY         => self::COLUMN_TYPE_INT,
         self::COLUMN_COUNTRYCODE    => self::COLUMN_TYPE_STRING,
         self::COLUMN_DESCRIPTION    => self::COLUMN_TYPE_STRING,
         self::COLUMN_ID             => self::COLUMN_TYPE_INT,
         self::COLUMN_INFOURL        => self::COLUMN_TYPE_STRING,
         self::COLUMN_LATITUDE       => self::COLUMN_TYPE_FLOAT,
         self::COLUMN_LONGITUDE      => self::COLUMN_TYPE_FLOAT,
+        self::COLUMN_MISSION        => self::COLUMN_TYPE_INT,
         self::COLUMN_NAME           => self::COLUMN_TYPE_STRING,
         self::COLUMN_UUID           => self::COLUMN_TYPE_STRING,
         self::COLUMN_WIKIURL        => self::COLUMN_TYPE_STRING
@@ -103,7 +109,7 @@ class SpaceBotequeDBase
         self::TABLE_LOCATIONS             => Location::TABLE_COLUMNS,
 #        self::TABLE_MISSIONS              => Mission::TABLE_COLUMNS,
         self::TABLE_ORBITS                => Orbit::TABLE_COLUMNS,
-#        self::TABLE_PADS                  => Pad::TABLE_COLUMNS,
+        self::TABLE_PADS                  => Pad::TABLE_COLUMNS,
 #        self::TABLE_ROCKET_CONFIGURATIONS => RocketConfiguration::TABLE_COLUMNS,
 
         self::TABLE_MISSIONS2AGENCIES => [
@@ -192,7 +198,7 @@ class SpaceBotequeDBase
      * @return mixed запись либо false в случае фейла
      *
      */
-    public function _read(
+    protected function _read(
         string $table = '',
         string $column = self::COLUMN_ID,
         $idValue = 0
@@ -243,7 +249,7 @@ class SpaceBotequeDBase
      * @param array  $incomeData  массив значений
      * @return boolean результат выполнения операции
      */
-    public function _replace(
+    protected function _replace(
         string $incomeTable = '',
         array  $incomeData = []
     )
