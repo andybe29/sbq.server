@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `agencies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `agencies` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `abbrev` varchar(255) DEFAULT NULL,
   `countryCode` varchar(3) DEFAULT NULL,
@@ -52,6 +52,31 @@ CREATE TABLE `launchStatuses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `launches`
+--
+
+DROP TABLE IF EXISTS `launches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `launches` (
+  `uuid` varchar(36) NOT NULL,
+  `name` varchar(1024) DEFAULT NULL,
+  `launchStatus` tinyint(4) DEFAULT NULL,
+  `rocket` int(11) DEFAULT NULL,
+  `rocketConfiguration` int(11) DEFAULT NULL,
+  `pad` int(11) DEFAULT NULL,
+  `location` int(11) DEFAULT NULL,
+  `net` datetime DEFAULT NULL,
+  `windowStart` datetime DEFAULT NULL,
+  `windowEnd` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`uuid`),
+  KEY `net` (`net`),
+  KEY `updated` (`updated`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `locations`
 --
 
@@ -59,7 +84,7 @@ DROP TABLE IF EXISTS `locations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `locations` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `countryCode` varchar(3) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
@@ -129,7 +154,7 @@ DROP TABLE IF EXISTS `pads`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pads` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `countryCode` varchar(3) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
@@ -163,10 +188,12 @@ DROP TABLE IF EXISTS `rocketConfigurations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rocketConfigurations` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `variant` varchar(255) DEFAULT NULL,
   `fullName` varchar(255) DEFAULT NULL,
+  `infoURL` varchar(1024) DEFAULT NULL,
+  `wikiURL` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -180,4 +207,4 @@ CREATE TABLE `rocketConfigurations` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-24 20:08:36
+-- Dump completed on 2025-02-26 22:48:23
