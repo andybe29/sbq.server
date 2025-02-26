@@ -60,6 +60,7 @@ class SpaceBotequeDBase
     const COLUMN_MISSION     = 'mission';       # TABLE_MISSIONS.COLUMN_ID
     const COLUMN_NAME        = 'name';
     const COLUMN_ORBIT       = 'orbit';         # TABLE_ORBITS.COLUMN_ID
+    const COLUMN_PAD         = 'pad';           # TABLE_PADS.COLUMN_ID
     const COLUMN_TYPE        = 'type';          # MissionType::MISSION_TYPES
     const COLUMN_UUID        = 'uuid';
     const COLUMN_WIKIURL     = 'wikiURL';
@@ -127,7 +128,9 @@ class SpaceBotequeDBase
         ],
 
         self::TABLE_PADS2AGENCIES => [
-        ],
+            self::COLUMN_PAD,
+            self::COLUMN_AGENCY
+        ]
     ];
 
     private $id, $uuid;
@@ -300,6 +303,42 @@ class SpaceBotequeDBase
         }
 
         return (false !== $this->sql->replace($incomeTable, $data));
+    }
+
+    /**
+     * Запись агентств в self::TABLE_MISSIONS2AGENCIES
+     * Запись пусковых площадок в self::TABLE_PADS2AGENCIES
+     * @param string $incomeTable наименование таблицы (из набора [self::TABLE_MISSIONS2AGENCIES, self::TABLE_PADS2AGENCIES])
+     * @param array $incomeData массив id агентств
+     * @return boolean результат выполнения операции
+     */
+    protected function _replaceAgencies(
+        string $incomeTable = '',
+        array $incomeData = []
+    )
+    {
+        if (empty($this->id) or !in_array($incomeTable, [self::TABLE_MISSIONS2AGENCIES, self::TABLE_PADS2AGENCIES])) return false;
+
+        $columnName = self::TABLES_COLUMNS[$incomeTable][0]; # self::COLUMN_MISSION || self::COLUMN_PAD
+
+        $this->sql->str = 'DELETE FROM ' . $incomeTable . ' WHERE ' . $columnName . ' = ' . $this->id;
+        $this->sql->execute();
+
+        $incomeData = array_map('intval', $incomeData);
+        $incomeData = array_filter($incomeData, function($agencyId) { return ($agencyId > 0); });
+
+        if (empty($incomeData)) return true;
+
+        $missionPadId = $this->id;
+        $values = array_map(function($agencyId) use ($missionPadId) {
+            return implode(', ', [$missionPadId, $agencyId]);
+        }, $incomeData);
+
+        $this->sql->str   = [];
+        $this->sql->str[] = 'INSERT INTO ' . $incomeTable;
+        $this->sql->str[] = '(' . $columnName . ', ' . self::COLUMN_AGENCY . ')';
+        $this->sql->str[] = 'VALUES (' . implode('), (', $values) . ')';
+        return (false !== $this->sql->execute());
     }
 
     /**

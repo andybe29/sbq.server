@@ -99,7 +99,9 @@
 
                 # mission
                 $mission->replace($missionData);
-                $mission->replaceAgencies($missionData['id'], $missions2agencies);
+
+                $mission->id = $missionData['id'];
+                $mission->replaceAgencies($missions2agencies);
             }
         }
 

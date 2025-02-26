@@ -56,28 +56,11 @@ class Mission extends SpaceBotequeDBase
 
     /**
      * «апись агентств в SpaceBotequeDBase::TABLE_MISSIONS2AGENCIES
-     * @param int   $missionId  id миссии
      * @param array $incomeData массив id агентств
      * @return boolean результат выполнени€ операции
      */
-    public function replaceAgencies(int $missionId = 0, array $incomeData = [])
+    public function replaceAgencies(array $incomeData = [])
     {
-        if ($missionId <= 0) return false;
-
-        $this->sql->str = 'DELETE FROM ' . parent::TABLE_MISSIONS2AGENCIES . ' WHERE ' . parent::COLUMN_MISSION . ' = ' . $missionId;
-        $this->sql->execute();
-
-        $incomeData = array_map('intval', $incomeData);
-        $incomeData = array_filter($incomeData, function($agencyId) { return ($agencyId > 0); });
-
-        if (empty($incomeData)) return true;
-
-        $values = array_map(function($agencyId) use ($missionId) { return implode(', ', [$missionId, $agencyId]); }, $incomeData);
-
-        $this->sql->str   = [];
-        $this->sql->str[] = 'INSERT INTO ' . parent::TABLE_MISSIONS2AGENCIES;
-        $this->sql->str[] = '(' . parent::COLUMN_MISSION . ', ' . parent::COLUMN_AGENCY . ')';
-        $this->sql->str[] = 'VALUES (' . implode('), (', $values) . ')';
-        return (false !== $this->sql->execute());
+        return $this->_replaceAgencies(parent::TABLE_MISSIONS2AGENCIES, $incomeData);
     }
 }
