@@ -58,7 +58,7 @@ class RocketConfiguration extends SpaceBotequeDBase
 
     /**
      * Парсинг ноды из rocket.confuguration
-     * @param array массив ноды
+     * @param array $node массив ноды
      * @return mixed массив с данными для self::replace либо false
      */
     public static function parseNode(array $node = [])
@@ -66,12 +66,12 @@ class RocketConfiguration extends SpaceBotequeDBase
         if (empty($node)) return false;
 
         return [
-            parent::COLUMN_ID          => $node['id'],
-            parent::COLUMN_NAME        => $node['name'],
-            parent::COLUMN_VARIANT     => $node['variant'],
-            parent::COLUMN_FULLNAME    => $node['full_name'],
-            parent::COLUMN_INFOURL     => (isset($node['info_url']) ? mb_ereg_replace('http:', 'https:', $node['info_url']) : ''),
-            parent::COLUMN_WIKIURL     => (isset($node['wiki_url']) ? mb_ereg_replace('http:', 'https:', $node['wiki_url']) : '')
+            parent::COLUMN_ID       => $node['id'],
+            parent::COLUMN_NAME     => $node['name'],
+            parent::COLUMN_VARIANT  => $node['variant'],
+            parent::COLUMN_FULLNAME => $node['full_name'],
+            parent::COLUMN_INFOURL  => (isset($node['info_url']) ? mb_ereg_replace('http:', 'https:', $node['info_url']) : ''),
+            parent::COLUMN_WIKIURL  => (isset($node['wiki_url']) ? mb_ereg_replace('http:', 'https:', $node['wiki_url']) : '')
         ];
     }
 }

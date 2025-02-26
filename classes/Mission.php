@@ -63,4 +63,24 @@ class Mission extends SpaceBotequeDBase
     {
         return $this->_replaceAgencies(parent::TABLE_MISSIONS2AGENCIES, $incomeData);
     }
+
+    /**
+     * Парсинг ноды mission
+     * @param string $uuid uuid пуска
+     * @param array  $node массив ноды
+     * @return mixed массив с данными для self::replace либо false
+     */
+    public static function parseNode(string $uuid = '', array $node = [])
+    {
+        if (empty($uuid) or empty($node)) return false;
+
+        return [
+            parent::COLUMN_ID          => $node['id'],
+            parent::COLUMN_NAME        => $node['name'],
+            parent::COLUMN_TYPE        => array_search($node['type'], MissionType::MISSION_TYPES, true),
+            parent::COLUMN_DESCRIPTION => $node['description'],
+            parent::COLUMN_LAUNCH      => $uuid,
+            parent::COLUMN_ORBIT       => $node['orbit']['id']
+        ];
+    }
 }

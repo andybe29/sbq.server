@@ -71,16 +71,6 @@
 
                 error_log($json, 3, $flog);
 
-                # данные для записи в SpaceBotequeDBase::TABLE_MISSIONS
-                $missionData = [
-                    SpaceBotequeDBase::COLUMN_ID          => $currentMissionNode['id'],
-                    SpaceBotequeDBase::COLUMN_NAME        => $currentMissionNode['name'],
-                    SpaceBotequeDBase::COLUMN_TYPE        => array_search($currentMissionNode['type'], MissionType::MISSION_TYPES, true),
-                    SpaceBotequeDBase::COLUMN_DESCRIPTION => $currentMissionNode['description'],
-                    SpaceBotequeDBase::COLUMN_LAUNCH      => $currentLaunchNode['id'],
-                    SpaceBotequeDBase::COLUMN_ORBIT       => $currentMissionNode['orbit']['id']
-                ];
-
                 # orbit
                 $orbit->replace($currentMissionNode['orbit']);
 
@@ -88,6 +78,7 @@
                 $launchStatus->replace($currentLaunchNode['status']);
 
                 # mission
+                $missionData = Mission::parseNode($currentLaunchNode['id'], $currentMissionNode);
                 $mission->replace($missionData);
 
                 # данные для записи в SpaceBotequeDBase::TABLE_MISSIONS2AGENCIES

@@ -59,7 +59,7 @@ class Agency extends SpaceBotequeDBase
 
     /**
      * Парсинг ноды из mission.agencies
-     * @param array массив ноды
+     * @param array $node массив ноды
      * @return mixed массив с данными для self::replace либо false
      */
     public static function parseNode(array $node = [])
