@@ -49,15 +49,18 @@ class SpaceBotequeDBase
      * наименования полей
      */
     const COLUMN_ABBREV      = 'abbrev';
-    const COLUMN_AGENCY      = 'agency'; # agencies.id
+    const COLUMN_AGENCY      = 'agency';        # TABLE_AGENCIES.COLUMN_ID
     const COLUMN_COUNTRYCODE = 'countryCode';
     const COLUMN_DESCRIPTION = 'description';
     const COLUMN_ID          = 'id';
     const COLUMN_INFOURL     = 'infoURL';
     const COLUMN_LATITUDE    = 'latitude';
+    const COLUMN_LAUNCH      = 'launch';        # TABLE_LAUNCHES.COLUMN_UUID
     const COLUMN_LONGITUDE   = 'longitude';
-    const COLUMN_MISSION     = 'mission'; # missions.id
+    const COLUMN_MISSION     = 'mission';       # TABLE_MISSIONS.COLUMN_ID
     const COLUMN_NAME        = 'name';
+    const COLUMN_ORBIT       = 'orbit';         # TABLE_ORBITS.COLUMN_ID
+    const COLUMN_TYPE        = 'type';          # MissionType::MISSION_TYPES
     const COLUMN_UUID        = 'uuid';
     const COLUMN_WIKIURL     = 'wikiURL';
 
@@ -69,9 +72,12 @@ class SpaceBotequeDBase
         self::COLUMN_ID,
         self::COLUMN_INFOURL,
         self::COLUMN_LATITUDE,
+        self::COLUMN_LAUNCH,
         self::COLUMN_LONGITUDE,
         self::COLUMN_MISSION,
         self::COLUMN_NAME,
+        self::COLUMN_ORBIT,
+        self::COLUMN_TYPE,
         self::COLUMN_UUID,
         self::COLUMN_WIKIURL
     ];
@@ -92,9 +98,12 @@ class SpaceBotequeDBase
         self::COLUMN_ID             => self::COLUMN_TYPE_INT,
         self::COLUMN_INFOURL        => self::COLUMN_TYPE_STRING,
         self::COLUMN_LATITUDE       => self::COLUMN_TYPE_FLOAT,
+        self::COLUMN_LAUNCH         => self::COLUMN_TYPE_STRING,
         self::COLUMN_LONGITUDE      => self::COLUMN_TYPE_FLOAT,
         self::COLUMN_MISSION        => self::COLUMN_TYPE_INT,
         self::COLUMN_NAME           => self::COLUMN_TYPE_STRING,
+        self::COLUMN_ORBIT          => self::COLUMN_TYPE_INT,
+        self::COLUMN_TYPE           => self::COLUMN_TYPE_INT,
         self::COLUMN_UUID           => self::COLUMN_TYPE_STRING,
         self::COLUMN_WIKIURL        => self::COLUMN_TYPE_STRING
     ];
@@ -107,12 +116,14 @@ class SpaceBotequeDBase
 #        self::TABLE_LAUNCHES              => Launch::TABLE_COLUMNS,
         self::TABLE_LAUNCH_STATUSES       => LaunchStatus::TABLE_COLUMNS,
         self::TABLE_LOCATIONS             => Location::TABLE_COLUMNS,
-#        self::TABLE_MISSIONS              => Mission::TABLE_COLUMNS,
+        self::TABLE_MISSIONS              => Mission::TABLE_COLUMNS,
         self::TABLE_ORBITS                => Orbit::TABLE_COLUMNS,
         self::TABLE_PADS                  => Pad::TABLE_COLUMNS,
 #        self::TABLE_ROCKET_CONFIGURATIONS => RocketConfiguration::TABLE_COLUMNS,
 
         self::TABLE_MISSIONS2AGENCIES => [
+            self::COLUMN_MISSION,
+            self::COLUMN_AGENCY
         ],
 
         self::TABLE_PADS2AGENCIES => [

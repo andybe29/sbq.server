@@ -36,6 +36,7 @@
 
     $agency       = new Agency($sql);
     $launchStatus = new LaunchStatus($sql);
+    $mission      = new Mission($sql);
     $orbit        = new Orbit($sql);
 
     do {
@@ -49,32 +50,56 @@
             foreach ($response['results'] as $currentLaunchNode) {
                 $currentMissionNode = $currentLaunchNode['mission'];
 
-                if (in_array($currentMissionNode['type'], MissionType::MISSION_TYPES)) {
-                    # to process
-                    $json = json_encode($currentLaunchNode, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
-                    $flog = SpaceBoteque::$instancePath . '/tmp/' . $currentLaunchNode['id'] . '.json';
-
-                    if (file_exists($flog)) {
-                        unlink($flog);
-                    }
-
-                    error_log($json, 3, $flog);
-
-                    # agencies
-                    foreach ($currentMissionNode['agencies'] as $currentAgencyNode) {
-                        $agency->replace(Agency::parse($currentAgencyNode));
-                    }
-
-                    # orbit
-                    $orbit->replace((array)$currentMissionNode['orbit']);
-
-                    # status
-                    $launchStatus->replace((array)$currentLaunchNode['status']);
-
-                } else if (!in_array($currentMissionNode['type'], MissionType::MISSION_TYPES_ALL)) {
+                if (!in_array($currentMissionNode['type'], MissionType::MISSION_TYPES_ALL)) {
                     # unknown Mission Type
                     $unknownMissionTypes[] = $currentMissionNode['type'];
                 }
+
+                # если тип миссии не соответствует SpaceBoteque - пропуск хода
+                if (!in_array($currentMissionNode['type'], MissionType::MISSION_TYPES)) continue;
+
+                # to process
+                $json = json_encode($currentLaunchNode, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+                $flog = SpaceBoteque::$instancePath . '/tmp/' . $currentLaunchNode['id'] . '.json';
+
+                if (file_exists($flog)) {
+                    unlink($flog);
+                }
+
+                error_log($json, 3, $flog);
+
+                # данные для записи в SpaceBotequeDBase::TABLE_LAUNCHES
+                $launchData = [];
+
+                # данные для записи в SpaceBotequeDBase::TABLE_MISSIONS
+                $missionData = [
+                    'id'          => $currentMissionNode['id'],
+                    'name'        => $currentMissionNode['name'],
+                    'type'        => array_search($currentMissionNode['type'], MissionType::MISSION_TYPES, true),
+                    'description' => $currentMissionNode['description'],
+                    'launch'      => $currentLaunchNode['id'],
+                    'orbit'       => $currentMissionNode['orbit']['id']
+                ];
+
+                # данные для записи в SpaceBotequeDBase::TABLE_MISSIONS2AGENCIES
+                $missions2agencies = [];
+
+                # agencies
+                foreach ($currentMissionNode['agencies'] as $currentAgencyNode) {
+                    $agency->replace(Agency::parse($currentAgencyNode));
+
+                    $missions2agencies[] = $currentAgencyNode['id'];
+                }
+
+                # orbit
+                $orbit->replace((array)$currentMissionNode['orbit']);
+
+                # status
+                $launchStatus->replace((array)$currentLaunchNode['status']);
+
+                # mission
+                $mission->replace($missionData);
+                $mission->replaceAgencies($missionData['id'], $missions2agencies);
             }
         }
 

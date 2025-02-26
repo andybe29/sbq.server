@@ -70,7 +70,7 @@ class MissionType
      * @const MISSION_TYPES значения, используемые в SpaceBoteque
      **/
     const MISSION_TYPES = [
-        self::MISSION_TYPE_EARTH_SCIENCE               => 'Earth Science',
+        # self::MISSION_TYPE_EARTH_SCIENCE               => 'Earth Science',
         self::MISSION_TYPE_PLANETARY_SCIENCE           => 'Planetary Science',
         self::MISSION_TYPE_ASTROPHYSICS                => 'Astrophysics',
         self::MISSION_TYPE_HELIOPHYSICS                => 'Heliophysics',
