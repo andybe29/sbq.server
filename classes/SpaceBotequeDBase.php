@@ -102,7 +102,7 @@ class SpaceBotequeDBase
         self::TABLE_LAUNCH_STATUSES       => LaunchStatus::TABLE_COLUMNS,
         self::TABLE_LOCATIONS             => Location::TABLE_COLUMNS,
 #        self::TABLE_MISSIONS              => Mission::TABLE_COLUMNS,
-#        self::TABLE_ORBITS                => Orbit::TABLE_COLUMNS,
+        self::TABLE_ORBITS                => Orbit::TABLE_COLUMNS,
 #        self::TABLE_PADS                  => Pad::TABLE_COLUMNS,
 #        self::TABLE_ROCKET_CONFIGURATIONS => RocketConfiguration::TABLE_COLUMNS,
 
@@ -250,6 +250,7 @@ class SpaceBotequeDBase
     {
         SpaceBoteque::$error = null;
 
+        # очистка входящего массива данных от лишних значений, не являющихся полями таблицы
         $data = array_filter($incomeData, function($column) use ($incomeTable) {
             return self::tableColumning($incomeTable, $column);
         }, ARRAY_FILTER_USE_KEY);

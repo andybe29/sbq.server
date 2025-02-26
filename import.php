@@ -36,6 +36,7 @@
 
     $agency       = new Agency($sql);
     $launchStatus = new LaunchStatus($sql);
+    $orbit        = new Orbit($sql);
 
     do {
         $url = $requestURL . '?' . http_build_query($query);
@@ -65,7 +66,7 @@
                     }
 
                     # orbit
-
+                    $orbit->replace((array)$currentMissionNode['orbit']);
 
                     # status
                     $launchStatus->replace((array)$currentLaunchNode['status']);
