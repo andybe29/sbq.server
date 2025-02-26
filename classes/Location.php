@@ -6,11 +6,11 @@
 class Location extends SpaceBotequeDBase
 {
     /**
-     * @const LLAPI_URI URI для получения списка локаций
+     * @const LLAPI_URI     URI для получения списка значений
      * @const TABLE         наименование таблицы сущности
      * @const TABLE_COLUMNS список полей в таблице сущности
      */
-    const LLAPI_URI = '/locations';
+    const LLAPI_URI     = '/locations/';
     const TABLE         = parent::TABLE_LOCATIONS;
     const TABLE_COLUMNS = [
         parent::COLUMN_ID,

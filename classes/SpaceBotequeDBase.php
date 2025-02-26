@@ -8,25 +8,25 @@ class SpaceBotequeDBase
     /**
      * наименования таблиц
      * @const TABLE_AGENCIES              агентства
-     * @const TABLE_LAUNCH_STATUSES       статусы пусков
+     * @const TABLE_LAUNCHSTATUSES        статусы пусков
      * @const TABLE_LAUNCHES              пуски
      * @const TABLE_LOCATIONS             локации пусковых площадок
      * @const TABLE_MISSIONS              миссии
      * @const TABLE_ORBITS                целевые орбиты
      * @const TABLE_PADS                  пусковые площадки
-     * @const TABLE_ROCKET_CONFIGURATIONS конфигурации ракет
+     * @const TABLE_ROCKETCONFIGURATIONS  конфигурации ракет
      *
      * @const TABLE_MISSIONS2AGENCIES     миссии и агентства
      * @const TABLE_PADS2AGENCIES         пусковые площадки и агентства
      */
     const TABLE_AGENCIES              = 'agencies';
-    const TABLE_LAUNCH_STATUSES       = 'launchStatuses';
+    const TABLE_LAUNCHSTATUSES        = 'launchStatuses';
     const TABLE_LAUNCHES              = 'launches';
     const TABLE_LOCATIONS             = 'locations';
     const TABLE_MISSIONS              = 'missions';
     const TABLE_ORBITS                = 'orbits';
     const TABLE_PADS                  = 'pads';
-    const TABLE_ROCKET_CONFIGURATIONS = 'rocketConfigurations';
+    const TABLE_ROCKETCONFIGURATIONS  = 'rocketConfigurations';
 
     const TABLE_MISSIONS2AGENCIES     = 'missions2agencies';
     const TABLE_PADS2AGENCIES         = 'pads2agencies';
@@ -36,13 +36,13 @@ class SpaceBotequeDBase
      */
     const TABLES = [
         self::TABLE_AGENCIES,
-        self::TABLE_LAUNCH_STATUSES,
+        self::TABLE_LAUNCHSTATUSES,
         self::TABLE_LAUNCHES,
         self::TABLE_LOCATIONS,
         self::TABLE_MISSIONS,
         self::TABLE_ORBITS,
         self::TABLE_PADS,
-        self::TABLE_ROCKET_CONFIGURATIONS
+        self::TABLE_ROCKETCONFIGURATIONS
     ];
 
     /**
@@ -52,11 +52,12 @@ class SpaceBotequeDBase
     const COLUMN_AGENCY              = 'agency';              # TABLE_AGENCIES.COLUMN_ID
     const COLUMN_COUNTRYCODE         = 'countryCode';
     const COLUMN_DESCRIPTION         = 'description';
+    const COLUMN_FULLNAME            = 'fullName';
     const COLUMN_ID                  = 'id';
     const COLUMN_INFOURL             = 'infoURL';
     const COLUMN_LATITUDE            = 'latitude';
     const COLUMN_LAUNCH              = 'launch';              # TABLE_LAUNCHES.COLUMN_UUID
-    const COLUMN_LAUNCHSTATUS        = 'launchStatus';        # TABLE_LAUNCH_STATUSES.COLUMN_ID
+    const COLUMN_LAUNCHSTATUS        = 'launchStatus';        # TABLE_LAUNCHSTATUSES.COLUMN_ID
     const COLUMN_LOCATION            = 'location';            # TABLE_LOCATIONS.COLUMN_ID
     const COLUMN_LONGITUDE           = 'longitude';
     const COLUMN_MISSION             = 'mission';             # TABLE_MISSIONS.COLUMN_ID
@@ -65,10 +66,11 @@ class SpaceBotequeDBase
     const COLUMN_ORBIT               = 'orbit';               # TABLE_ORBITS.COLUMN_ID
     const COLUMN_PAD                 = 'pad';                 # TABLE_PADS.COLUMN_ID
     const COLUMN_ROCKET              = 'rocket';              # reserved
-    const COLUMN_ROCKETCONFIGURATION = 'rocketConfiguration'; # TABLE_ROCKET_CONFIGURATIONS.COLUMN_ID
+    const COLUMN_ROCKETCONFIGURATION = 'rocketConfiguration'; # TABLE_ROCKETCONFIGURATIONS.COLUMN_ID
     const COLUMN_TYPE                = 'type';                # MissionType::MISSION_TYPES
     const COLUMN_UUID                = 'uuid';
     const COLUMN_UPDATED             = 'updated';
+    const COLUMN_VARIANT             = 'variant';
     const COLUMN_WIKIURL             = 'wikiURL';
     const COLUMN_WINDOWEND           = 'windowEnd';
     const COLUMN_WINDOWSTART         = 'windowStart';
@@ -78,6 +80,7 @@ class SpaceBotequeDBase
         self::COLUMN_AGENCY,
         self::COLUMN_COUNTRYCODE,
         self::COLUMN_DESCRIPTION,
+        self::COLUMN_FULLNAME,
         self::COLUMN_ID,
         self::COLUMN_INFOURL,
         self::COLUMN_LATITUDE,
@@ -95,6 +98,7 @@ class SpaceBotequeDBase
         self::COLUMN_TYPE,
         self::COLUMN_UUID,
         self::COLUMN_UPDATED,
+        self::COLUMN_VARIANT,
         self::COLUMN_WIKIURL,
         self::COLUMN_WINDOWEND,
         self::COLUMN_WINDOWSTART
@@ -113,6 +117,7 @@ class SpaceBotequeDBase
         self::COLUMN_AGENCY              => self::COLUMN_TYPE_INT,
         self::COLUMN_COUNTRYCODE         => self::COLUMN_TYPE_STRING,
         self::COLUMN_DESCRIPTION         => self::COLUMN_TYPE_STRING,
+        self::COLUMN_FULLNAME            => self::COLUMN_TYPE_STRING,
         self::COLUMN_ID                  => self::COLUMN_TYPE_INT,
         self::COLUMN_INFOURL             => self::COLUMN_TYPE_STRING,
         self::COLUMN_LATITUDE            => self::COLUMN_TYPE_FLOAT,
@@ -130,6 +135,7 @@ class SpaceBotequeDBase
         self::COLUMN_TYPE                => self::COLUMN_TYPE_INT,
         self::COLUMN_UUID                => self::COLUMN_TYPE_STRING,
         self::COLUMN_UPDATED             => self::COLUMN_TYPE_DTIME,
+        self::COLUMN_VARIANT             => self::COLUMN_TYPE_STRING,
         self::COLUMN_WIKIURL             => self::COLUMN_TYPE_STRING,
         self::COLUMN_WINDOWEND           => self::COLUMN_TYPE_DTIME,
         self::COLUMN_WINDOWSTART         => self::COLUMN_TYPE_DTIME
@@ -141,12 +147,12 @@ class SpaceBotequeDBase
     const TABLES_COLUMNS = [
         self::TABLE_AGENCIES              => Agency::TABLE_COLUMNS,
 #        self::TABLE_LAUNCHES              => Launch::TABLE_COLUMNS,
-        self::TABLE_LAUNCH_STATUSES       => LaunchStatus::TABLE_COLUMNS,
+        self::TABLE_LAUNCHSTATUSES        => LaunchStatus::TABLE_COLUMNS,
         self::TABLE_LOCATIONS             => Location::TABLE_COLUMNS,
         self::TABLE_MISSIONS              => Mission::TABLE_COLUMNS,
         self::TABLE_ORBITS                => Orbit::TABLE_COLUMNS,
         self::TABLE_PADS                  => Pad::TABLE_COLUMNS,
-#        self::TABLE_ROCKET_CONFIGURATIONS => RocketConfiguration::TABLE_COLUMNS,
+        self::TABLE_ROCKETCONFIGURATIONS  => RocketConfiguration::TABLE_COLUMNS,
 
         self::TABLE_MISSIONS2AGENCIES => [
             self::COLUMN_MISSION,

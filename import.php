@@ -34,12 +34,13 @@
 
     $unknownMissionTypes = [];
 
-    $agency       = new Agency($sql);
-    $launchStatus = new LaunchStatus($sql);
-    $location     = new Location($sql);
-    $mission      = new Mission($sql);
-    $orbit        = new Orbit($sql);
-    $pad          = new Pad($sql);
+    $agency              = new Agency($sql);
+    $launchStatus        = new LaunchStatus($sql);
+    $location            = new Location($sql);
+    $mission             = new Mission($sql);
+    $orbit               = new Orbit($sql);
+    $pad                 = new Pad($sql);
+    $rocketConfiguration = new RocketConfiguration($sql);
 
     do {
         $url = $requestURL . '?' . http_build_query($query);
@@ -94,7 +95,8 @@
 
                 # agencies
                 foreach ($currentMissionNode['agencies'] as $currentAgencyNode) {
-                    $agency->replace(Agency::parseNode($currentAgencyNode));
+                    $agencyData = Agency::parseNode($currentAgencyNode);
+                    $agency->replace($agencyData);
 
                     $agencies[] = $currentAgencyNode['id'];
                 }
@@ -119,17 +121,20 @@
                 ];
 
                 # location
-                $location->replace(SpaceBotequeDBase::parseLocationPadNode($currentLaunchNode['pad']['location']));
+                $locationData = SpaceBotequeDBase::parseLocationPadNode($currentLaunchNode['pad']['location']);
+                $location->replace($locationData);
 
                 # pad
-                $pad->replace(SpaceBotequeDBase::parseLocationPadNode($currentLaunchNode['pad']));
+                $padData = SpaceBotequeDBase::parseLocationPadNode($currentLaunchNode['pad']);
+                $pad->replace($padData);
 
                 # данные для записи в SpaceBotequeDBase::TABLE_PADS2AGENCIES
                 $agencies = [];
 
                 # agencies
                 foreach ($currentLaunchNode['pad']['agencies'] as $currentAgencyNode) {
-                    $agency->replace(Agency::parseNode($currentAgencyNode));
+                    $agencyData = Agency::parseNode($currentAgencyNode);
+                    $agency->replace($agencyData);
 
                     $agencies[] = $currentAgencyNode['id'];
                 }
@@ -137,6 +142,10 @@
                 # pads2agencies
                 $pad->id = $currentLaunchNode['pad']['id'];
                 $pad->replaceAgencies($agencies);
+
+                # rocketConfigurations
+                $rcData = RocketConfiguration::parseNode($currentLaunchNode['rocket']['configuration']);
+                $rocketConfiguration->replace($rcData);
 
             }
         }

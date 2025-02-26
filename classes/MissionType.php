@@ -1,14 +1,14 @@
 <?php
 /**
+ * Типы миссий
  * @author andy.bezbozhny <andy.bezbozhny@gmail.com>
- * константы типов миссий
  */
 class MissionType
 {
     /**
-     * URI для получения списка типов миссий
+     * @const LLAPI_URI URI для получения списка значений
      */
-    const MISSION_TYPES_LLAPI_URI   = '/config/mission_types';
+    const LLAPI_URI = '/config/mission_types';
 
     /**
      * @const Типы миссий (все)

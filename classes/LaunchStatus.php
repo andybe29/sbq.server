@@ -11,7 +11,7 @@ class LaunchStatus extends SpaceBotequeDBase
      * @const TABLE_COLUMNS список полей в таблице сущности
      */
     const LLAPI_URI     = '/config/launch_statuses/';
-    const TABLE         = parent::TABLE_LAUNCH_STATUSES;
+    const TABLE         = parent::TABLE_LAUNCHSTATUSES;
     const TABLE_COLUMNS = [
         parent::COLUMN_ID,
         parent::COLUMN_NAME,

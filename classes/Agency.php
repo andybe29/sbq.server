@@ -10,8 +10,8 @@ class Agency extends SpaceBotequeDBase
      * @const TABLE         наименование таблицы сущности
      * @const TABLE_COLUMNS список полей в таблице сущности
      */
-    const LLAPI_URI = '/agencies';
-    const TABLE     = parent::TABLE_AGENCIES;
+    const LLAPI_URI     = '/agencies/';
+    const TABLE         = parent::TABLE_AGENCIES;
     const TABLE_COLUMNS = [
         parent::COLUMN_ID,
         parent::COLUMN_NAME,

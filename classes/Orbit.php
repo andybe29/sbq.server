@@ -5,11 +5,11 @@
 class Orbit extends SpaceBotequeDBase
 {
     /**
-     * @const LLAPI_URI URI для получения списка значений орбит
+     * @const LLAPI_URI     URI для получения списка значений
      * @const TABLE         наименование таблицы сущности
      * @const TABLE_COLUMNS список полей в таблице сущности
      */
-    const LLAPI_URI = '/config/orbits';
+    const LLAPI_URI     = '/config/orbits/';
     const TABLE         = parent::TABLE_ORBITS;
     const TABLE_COLUMNS = [
         parent::COLUMN_ID,

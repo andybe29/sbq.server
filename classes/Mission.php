@@ -9,7 +9,7 @@ class Mission extends SpaceBotequeDBase
      * @const TABLE         наименование таблицы сущности
      * @const TABLE_COLUMNS список полей в таблице сущности
      */
-    const TABLE = parent::TABLE_MISSIONS;
+    const TABLE         = parent::TABLE_MISSIONS;
     const TABLE_COLUMNS = [
         parent::COLUMN_ID,
         parent::COLUMN_NAME,
