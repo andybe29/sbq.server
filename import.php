@@ -36,8 +36,10 @@
 
     $agency       = new Agency($sql);
     $launchStatus = new LaunchStatus($sql);
+    $location     = new Location($sql);
     $mission      = new Mission($sql);
     $orbit        = new Orbit($sql);
+    $pad          = new Pad($sql);
 
     do {
         $url = $requestURL . '?' . http_build_query($query);
@@ -68,40 +70,74 @@
 
                 error_log($json, 3, $flog);
 
-                # данные для записи в SpaceBotequeDBase::TABLE_LAUNCHES
-                $launchData = [];
-
                 # данные для записи в SpaceBotequeDBase::TABLE_MISSIONS
                 $missionData = [
-                    'id'          => $currentMissionNode['id'],
-                    'name'        => $currentMissionNode['name'],
-                    'type'        => array_search($currentMissionNode['type'], MissionType::MISSION_TYPES, true),
-                    'description' => $currentMissionNode['description'],
-                    'launch'      => $currentLaunchNode['id'],
-                    'orbit'       => $currentMissionNode['orbit']['id']
+                    SpaceBotequeDBase::COLUMN_ID          => $currentMissionNode['id'],
+                    SpaceBotequeDBase::COLUMN_NAME        => $currentMissionNode['name'],
+                    SpaceBotequeDBase::COLUMN_TYPE        => array_search($currentMissionNode['type'], MissionType::MISSION_TYPES, true),
+                    SpaceBotequeDBase::COLUMN_DESCRIPTION => $currentMissionNode['description'],
+                    SpaceBotequeDBase::COLUMN_LAUNCH      => $currentLaunchNode['id'],
+                    SpaceBotequeDBase::COLUMN_ORBIT       => $currentMissionNode['orbit']['id']
                 ];
 
-                # данные для записи в SpaceBotequeDBase::TABLE_MISSIONS2AGENCIES
-                $missions2agencies = [];
-
-                # agencies
-                foreach ($currentMissionNode['agencies'] as $currentAgencyNode) {
-                    $agency->replace(Agency::parse($currentAgencyNode));
-
-                    $missions2agencies[] = $currentAgencyNode['id'];
-                }
-
                 # orbit
-                $orbit->replace((array)$currentMissionNode['orbit']);
+                $orbit->replace($currentMissionNode['orbit']);
 
                 # status
-                $launchStatus->replace((array)$currentLaunchNode['status']);
+                $launchStatus->replace($currentLaunchNode['status']);
 
                 # mission
                 $mission->replace($missionData);
 
+                # данные для записи в SpaceBotequeDBase::TABLE_MISSIONS2AGENCIES
+                $agencies = [];
+
+                # agencies
+                foreach ($currentMissionNode['agencies'] as $currentAgencyNode) {
+                    $agency->replace(Agency::parseNode($currentAgencyNode));
+
+                    $agencies[] = $currentAgencyNode['id'];
+                }
+
+                # missions2agencies
                 $mission->id = $missionData['id'];
-                $mission->replaceAgencies($missions2agencies);
+                $mission->replaceAgencies($agencies);
+
+                # данные для записи в SpaceBotequeDBase::TABLE_LAUNCHES
+                $launchData = [
+                    SpaceBotequeDBase::COLUMN_UUID                => $currentLaunchNode['id'],
+                    SpaceBotequeDBase::COLUMN_NAME                => $currentLaunchNode['name'],
+                    SpaceBotequeDBase::COLUMN_LAUNCHSTATUS        => $currentLaunchNode['status']['id'],
+                    SpaceBotequeDBase::COLUMN_ROCKET              => $currentLaunchNode['rocket']['id'],
+                    SpaceBotequeDBase::COLUMN_ROCKETCONFIGURATION => $currentLaunchNode['rocket']['configuration']['id'],
+                    SpaceBotequeDBase::COLUMN_PAD                 => $currentLaunchNode['pad']['id'],
+                    SpaceBotequeDBase::COLUMN_LOCATION            => $currentLaunchNode['pad']['location']['id'],
+                    SpaceBotequeDBase::COLUMN_NET                 => $currentLaunchNode['net'],
+                    SpaceBotequeDBase::COLUMN_WINDOWSTART         => $currentLaunchNode['window_start'],
+                    SpaceBotequeDBase::COLUMN_WINDOWEND           => $currentLaunchNode['window_end'],
+                    SpaceBotequeDBase::COLUMN_UPDATED             => $currentLaunchNode['last_updated']
+                ];
+
+                # location
+                $location->replace(SpaceBotequeDBase::parseLocationPadNode($currentLaunchNode['pad']['location']));
+
+                # pad
+                $pad->replace(SpaceBotequeDBase::parseLocationPadNode($currentLaunchNode['pad']));
+
+                # данные для записи в SpaceBotequeDBase::TABLE_PADS2AGENCIES
+                $agencies = [];
+
+                # agencies
+                foreach ($currentLaunchNode['pad']['agencies'] as $currentAgencyNode) {
+                    $agency->replace(Agency::parseNode($currentAgencyNode));
+
+                    $agencies[] = $currentAgencyNode['id'];
+                }
+
+                # pads2agencies
+                $pad->id = $currentLaunchNode['pad']['id'];
+                $pad->replaceAgencies($agencies);
+
             }
         }
 

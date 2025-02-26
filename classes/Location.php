@@ -55,5 +55,4 @@ class Location extends SpaceBotequeDBase
     {
         return $this->_replace(self::TABLE, $incomeData);
     }
-
 }

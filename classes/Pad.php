@@ -1,5 +1,6 @@
 <?php
 /**
+ * Пусковые площадки
  * @author andy.bezbozhny <andy.bezbozhny@gmail.com>
  */
 class Pad extends SpaceBotequeDBase
@@ -55,4 +56,13 @@ class Pad extends SpaceBotequeDBase
         return $this->_replace(self::TABLE, $incomeData);
     }
 
+    /**
+     * Запись агентств в SpaceBotequeDBase::TABLE_PADS2AGENCIES
+     * @param array $incomeData массив id агентств
+     * @return boolean результат выполнения операции
+     */
+    public function replaceAgencies(array $incomeData = [])
+    {
+        return $this->_replaceAgencies(parent::TABLE_PADS2AGENCIES, $incomeData);
+    }
 }

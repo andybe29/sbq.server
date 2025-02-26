@@ -62,7 +62,7 @@ class Agency extends SpaceBotequeDBase
      * @param array массив ноды
      * @return mixed массив с данными для self::replace либо false
      */
-    public static function parse(array $node = [])
+    public static function parseNode(array $node = [])
     {
         if (empty($node)) return false;
 
@@ -72,9 +72,8 @@ class Agency extends SpaceBotequeDBase
             parent::COLUMN_ABBREV      => $node['abbrev'],
             parent::COLUMN_COUNTRYCODE => $node['country'][0]['alpha_3_code'],
             parent::COLUMN_DESCRIPTION => $node['description'],
-            parent::COLUMN_INFOURL     => mb_ereg_replace('http:', 'https:', $node['info_url']),
-            parent::COLUMN_WIKIURL     => mb_ereg_replace('http:', 'https:', $node['wiki_url'])
+            parent::COLUMN_INFOURL     => (isset($node['info_url']) ? mb_ereg_replace('http:', 'https:', $node['info_url']) : ''),
+            parent::COLUMN_WIKIURL     => (isset($node['wiki_url']) ? mb_ereg_replace('http:', 'https:', $node['wiki_url']) : '')
         ];
-
     }
 }

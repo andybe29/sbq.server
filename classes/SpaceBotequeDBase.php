@@ -48,22 +48,30 @@ class SpaceBotequeDBase
     /**
      * наименования полей
      */
-    const COLUMN_ABBREV      = 'abbrev';
-    const COLUMN_AGENCY      = 'agency';        # TABLE_AGENCIES.COLUMN_ID
-    const COLUMN_COUNTRYCODE = 'countryCode';
-    const COLUMN_DESCRIPTION = 'description';
-    const COLUMN_ID          = 'id';
-    const COLUMN_INFOURL     = 'infoURL';
-    const COLUMN_LATITUDE    = 'latitude';
-    const COLUMN_LAUNCH      = 'launch';        # TABLE_LAUNCHES.COLUMN_UUID
-    const COLUMN_LONGITUDE   = 'longitude';
-    const COLUMN_MISSION     = 'mission';       # TABLE_MISSIONS.COLUMN_ID
-    const COLUMN_NAME        = 'name';
-    const COLUMN_ORBIT       = 'orbit';         # TABLE_ORBITS.COLUMN_ID
-    const COLUMN_PAD         = 'pad';           # TABLE_PADS.COLUMN_ID
-    const COLUMN_TYPE        = 'type';          # MissionType::MISSION_TYPES
-    const COLUMN_UUID        = 'uuid';
-    const COLUMN_WIKIURL     = 'wikiURL';
+    const COLUMN_ABBREV              = 'abbrev';
+    const COLUMN_AGENCY              = 'agency';              # TABLE_AGENCIES.COLUMN_ID
+    const COLUMN_COUNTRYCODE         = 'countryCode';
+    const COLUMN_DESCRIPTION         = 'description';
+    const COLUMN_ID                  = 'id';
+    const COLUMN_INFOURL             = 'infoURL';
+    const COLUMN_LATITUDE            = 'latitude';
+    const COLUMN_LAUNCH              = 'launch';              # TABLE_LAUNCHES.COLUMN_UUID
+    const COLUMN_LAUNCHSTATUS        = 'launchStatus';        # TABLE_LAUNCH_STATUSES.COLUMN_ID
+    const COLUMN_LOCATION            = 'location';            # TABLE_LOCATIONS.COLUMN_ID
+    const COLUMN_LONGITUDE           = 'longitude';
+    const COLUMN_MISSION             = 'mission';             # TABLE_MISSIONS.COLUMN_ID
+    const COLUMN_NAME                = 'name';
+    const COLUMN_NET                 = 'net';
+    const COLUMN_ORBIT               = 'orbit';               # TABLE_ORBITS.COLUMN_ID
+    const COLUMN_PAD                 = 'pad';                 # TABLE_PADS.COLUMN_ID
+    const COLUMN_ROCKET              = 'rocket';              # reserved
+    const COLUMN_ROCKETCONFIGURATION = 'rocketConfiguration'; # TABLE_ROCKET_CONFIGURATIONS.COLUMN_ID
+    const COLUMN_TYPE                = 'type';                # MissionType::MISSION_TYPES
+    const COLUMN_UUID                = 'uuid';
+    const COLUMN_UPDATED             = 'updated';
+    const COLUMN_WIKIURL             = 'wikiURL';
+    const COLUMN_WINDOWEND           = 'windowEnd';
+    const COLUMN_WINDOWSTART         = 'windowStart';
 
     const COLUMNS = [
         self::COLUMN_ABBREV,
@@ -74,13 +82,22 @@ class SpaceBotequeDBase
         self::COLUMN_INFOURL,
         self::COLUMN_LATITUDE,
         self::COLUMN_LAUNCH,
+        self::COLUMN_LAUNCHSTATUS,
+        self::COLUMN_LOCATION,
         self::COLUMN_LONGITUDE,
         self::COLUMN_MISSION,
         self::COLUMN_NAME,
+        self::COLUMN_NET,
         self::COLUMN_ORBIT,
+        self::COLUMN_PAD,
+        self::COLUMN_ROCKET,
+        self::COLUMN_ROCKETCONFIGURATION,
         self::COLUMN_TYPE,
         self::COLUMN_UUID,
-        self::COLUMN_WIKIURL
+        self::COLUMN_UPDATED,
+        self::COLUMN_WIKIURL,
+        self::COLUMN_WINDOWEND,
+        self::COLUMN_WINDOWSTART
     ];
 
     /**
@@ -92,21 +109,30 @@ class SpaceBotequeDBase
     const COLUMN_TYPE_STRING = 'string';
 
     const COLUMN_TYPES = [
-        self::COLUMN_ABBREV         => self::COLUMN_TYPE_STRING,
-        self::COLUMN_AGENCY         => self::COLUMN_TYPE_INT,
-        self::COLUMN_COUNTRYCODE    => self::COLUMN_TYPE_STRING,
-        self::COLUMN_DESCRIPTION    => self::COLUMN_TYPE_STRING,
-        self::COLUMN_ID             => self::COLUMN_TYPE_INT,
-        self::COLUMN_INFOURL        => self::COLUMN_TYPE_STRING,
-        self::COLUMN_LATITUDE       => self::COLUMN_TYPE_FLOAT,
-        self::COLUMN_LAUNCH         => self::COLUMN_TYPE_STRING,
-        self::COLUMN_LONGITUDE      => self::COLUMN_TYPE_FLOAT,
-        self::COLUMN_MISSION        => self::COLUMN_TYPE_INT,
-        self::COLUMN_NAME           => self::COLUMN_TYPE_STRING,
-        self::COLUMN_ORBIT          => self::COLUMN_TYPE_INT,
-        self::COLUMN_TYPE           => self::COLUMN_TYPE_INT,
-        self::COLUMN_UUID           => self::COLUMN_TYPE_STRING,
-        self::COLUMN_WIKIURL        => self::COLUMN_TYPE_STRING
+        self::COLUMN_ABBREV              => self::COLUMN_TYPE_STRING,
+        self::COLUMN_AGENCY              => self::COLUMN_TYPE_INT,
+        self::COLUMN_COUNTRYCODE         => self::COLUMN_TYPE_STRING,
+        self::COLUMN_DESCRIPTION         => self::COLUMN_TYPE_STRING,
+        self::COLUMN_ID                  => self::COLUMN_TYPE_INT,
+        self::COLUMN_INFOURL             => self::COLUMN_TYPE_STRING,
+        self::COLUMN_LATITUDE            => self::COLUMN_TYPE_FLOAT,
+        self::COLUMN_LAUNCH              => self::COLUMN_TYPE_STRING,
+        self::COLUMN_LAUNCHSTATUS        => self::COLUMN_TYPE_INT,
+        self::COLUMN_LOCATION            => self::COLUMN_TYPE_INT,
+        self::COLUMN_LONGITUDE           => self::COLUMN_TYPE_FLOAT,
+        self::COLUMN_MISSION             => self::COLUMN_TYPE_INT,
+        self::COLUMN_NAME                => self::COLUMN_TYPE_STRING,
+        self::COLUMN_NET                 => self::COLUMN_TYPE_DTIME,
+        self::COLUMN_ORBIT               => self::COLUMN_TYPE_INT,
+        self::COLUMN_PAD                 => self::COLUMN_TYPE_INT,
+        self::COLUMN_ROCKET              => self::COLUMN_TYPE_INT,
+        self::COLUMN_ROCKETCONFIGURATION => self::COLUMN_TYPE_INT,
+        self::COLUMN_TYPE                => self::COLUMN_TYPE_INT,
+        self::COLUMN_UUID                => self::COLUMN_TYPE_STRING,
+        self::COLUMN_UPDATED             => self::COLUMN_TYPE_DTIME,
+        self::COLUMN_WIKIURL             => self::COLUMN_TYPE_STRING,
+        self::COLUMN_WINDOWEND           => self::COLUMN_TYPE_DTIME,
+        self::COLUMN_WINDOWSTART         => self::COLUMN_TYPE_DTIME
     ];
 
     /**
@@ -339,6 +365,25 @@ class SpaceBotequeDBase
         $this->sql->str[] = '(' . $columnName . ', ' . self::COLUMN_AGENCY . ')';
         $this->sql->str[] = 'VALUES (' . implode('), (', $values) . ')';
         return (false !== $this->sql->execute());
+    }
+
+    /**
+     * Парсинг ноды pad || location
+     * @param array массив ноды
+     * @return mixed массив с данными для self::replace либо false
+     */
+    public static function parseLocationPadNode(array $node = [])
+    {
+        if (empty($node)) return false;
+
+        return [
+            self::COLUMN_ID          => $node['id'],
+            self::COLUMN_NAME        => $node['name'],
+            self::COLUMN_COUNTRYCODE => $node['country']['alpha_3_code'],
+            self::COLUMN_DESCRIPTION => $node['description'],
+            self::COLUMN_LATITUDE    => $node['latitude'],
+            self::COLUMN_LONGITUDE   => $node['longitude']
+        ];
     }
 
     /**
