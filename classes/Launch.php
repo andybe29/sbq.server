@@ -1,6 +1,6 @@
 <?php
 /**
- * Ïóñêè
+ * ÐŸÑƒÑÐºÐ¸
  * @author andy.bezbozhny <andy.bezbozhny@gmail.com>
  */
 class Launch
