@@ -21,7 +21,6 @@ class SpaceBoteque
 
     /**
      * @const LL_API_URL   API URL в зависимости от инстанса
-     * @const LL_API_QUERY параметры запроса (http_build_query)
      */
     const LL_API_URL = [
         self::INSTANCE_DEV => 'https://lldev.thespacedevs.com/2.3.0',
