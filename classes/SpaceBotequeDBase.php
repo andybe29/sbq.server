@@ -146,7 +146,7 @@ class SpaceBotequeDBase
      */
     const TABLES_COLUMNS = [
         self::TABLE_AGENCIES              => Agency::TABLE_COLUMNS,
-#        self::TABLE_LAUNCHES              => Launch::TABLE_COLUMNS,
+        self::TABLE_LAUNCHES              => Launch::TABLE_COLUMNS,
         self::TABLE_LAUNCHSTATUSES        => LaunchStatus::TABLE_COLUMNS,
         self::TABLE_LOCATIONS             => Location::TABLE_COLUMNS,
         self::TABLE_MISSIONS              => Mission::TABLE_COLUMNS,
@@ -319,7 +319,16 @@ class SpaceBotequeDBase
 
         foreach ($data as $column => $value) {
             switch (self::COLUMN_TYPES[$column]) {
-                case self::COLUMN_TYPE_DTIME:
+                case self::COLUMN_TYPE_DTIME: {
+                    if (empty($value)) {
+                        $data[$column] = 'NULL';
+                    } else {
+                        $value = is_int($value) ? date('Y-m-d H:i:s', $value) : $value;
+                        $data[$column] = $this->sql->varchar($value);
+                    }
+                    break;
+                }
+
                 case self::COLUMN_TYPE_STRING: {
                     $data[$column] = empty($value) ? 'NULL' : $this->sql->varchar($value);
                     break;
@@ -418,26 +427,26 @@ class SpaceBotequeDBase
      */
     public static function typeCasting(array $data = [])
     {
-        foreach ($data as $key => $value) {
-            switch (self::COLUMN_TYPES[$key]) {
+        foreach ($data as $column => $value) {
+            switch (self::COLUMN_TYPES[$column]) {
                 case self::COLUMN_TYPE_DTIME: {
-                    $data[$key] = is_int($value) ? date('Y-m-d H:i:s', $value) : strtotime($value);
+                    $data[$column] = is_int($value) ? $value : strtotime($value);
                     break;
                 }
 
                 case self::COLUMN_TYPE_FLOAT: {
-                    $data[$key] = (float)$value;
+                    $data[$column] = (float)$value;
                     break;
                 }
 
                 case self::COLUMN_TYPE_INT: {
-                    $data[$key] = (int)$value;
+                    $data[$column] = (int)$value;
                     break;
                 }
 
                 case self::COLUMN_TYPE_STRING:
                 default: {
-                    $data[$key] = (string)$value;
+                    $data[$column] = (string)$value;
                     break;
                 }
             }

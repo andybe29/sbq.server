@@ -76,8 +76,7 @@ class MissionType
         self::MISSION_TYPE_HELIOPHYSICS                => 'Heliophysics',
         self::MISSION_TYPE_ROBOTIC_EXPLORATION         => 'Robotic Exploration',
         self::MISSION_TYPE_LUNAR_EXPLORATION           => 'Lunar Exploration',
-        self::MISSION_TYPE_MATERIALS_SCIENCE           => 'Materials Science',
-        self::MISSION_TYPE_BIOLOGY                     => 'Biology'
+        # self::MISSION_TYPE_BIOLOGY                     => 'Biology'
     ];
 
 }

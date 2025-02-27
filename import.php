@@ -23,9 +23,9 @@
         SpaceBoteque::log2file($fname . ' => has began');
     }
 
-    $requestURL = implode([SpaceBoteque::getCurrentAPIURL(), '/launches/upcoming/']);
+    $requestURL = implode([SpaceBoteque::getCurrentAPIURL(), Launch::LLAPI_URI_UPCOMING]);
 
-    $query = [
+    $requestQuery = [
         'limit'    => 25,
         'mode'     => 'detailed',
         'offset'   => 0,
@@ -35,6 +35,7 @@
     $unknownMissionTypes = [];
 
     $agency              = new Agency($sql);
+    $launch              = new Launch($sql);
     $launchStatus        = new LaunchStatus($sql);
     $location            = new Location($sql);
     $mission             = new Mission($sql);
@@ -43,9 +44,11 @@
     $rocketConfiguration = new RocketConfiguration($sql);
 
     do {
-        $url = $requestURL . '?' . http_build_query($query);
+        $url = $requestURL . '?' . http_build_query($requestQuery);
 
-        echo $url . PHP_EOL;
+        if (SpaceBoteque::INSTANCE_DEV == SpaceBoteque::$currentInstance) {
+            echo $url . PHP_EOL;
+        }
 
         $response = SpaceBoteque::requestURL($url);
 
@@ -96,21 +99,6 @@
                 $mission->id = $missionData['id'];
                 $mission->replaceAgencies($agencies);
 
-                # данные для записи в SpaceBotequeDBase::TABLE_LAUNCHES
-                $launchData = [
-                    SpaceBotequeDBase::COLUMN_UUID                => $currentLaunchNode['id'],
-                    SpaceBotequeDBase::COLUMN_NAME                => $currentLaunchNode['name'],
-                    SpaceBotequeDBase::COLUMN_LAUNCHSTATUS        => $currentLaunchNode['status']['id'],
-                    SpaceBotequeDBase::COLUMN_ROCKET              => $currentLaunchNode['rocket']['id'],
-                    SpaceBotequeDBase::COLUMN_ROCKETCONFIGURATION => $currentLaunchNode['rocket']['configuration']['id'],
-                    SpaceBotequeDBase::COLUMN_PAD                 => $currentLaunchNode['pad']['id'],
-                    SpaceBotequeDBase::COLUMN_LOCATION            => $currentLaunchNode['pad']['location']['id'],
-                    SpaceBotequeDBase::COLUMN_NET                 => $currentLaunchNode['net'],
-                    SpaceBotequeDBase::COLUMN_WINDOWSTART         => $currentLaunchNode['window_start'],
-                    SpaceBotequeDBase::COLUMN_WINDOWEND           => $currentLaunchNode['window_end'],
-                    SpaceBotequeDBase::COLUMN_UPDATED             => $currentLaunchNode['last_updated']
-                ];
-
                 # location
                 $locationData = SpaceBotequeDBase::parseLocationPadNode($currentLaunchNode['pad']['location']);
                 $location->replace($locationData);
@@ -138,6 +126,8 @@
                 $rcData = RocketConfiguration::parseNode($currentLaunchNode['rocket']['configuration']);
                 $rocketConfiguration->replace($rcData);
 
+                $launchData = Launch::parseNode($currentLaunchNode);
+                $launch->replace($launchData);
             }
         }
 
@@ -145,9 +135,9 @@
             echo json_encode(SpaceBoteque::$error, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE) . PHP_EOL;
         }
 
-        $query['offset'] += $query['limit'];
+        $requestQuery['offset'] += $requestQuery['limit'];
 
-    } while (false and empty(SpaceBoteque::$error) and !empty($response['next']));
+    } while (empty(SpaceBoteque::$error) and !empty($response['next']));
 
     if ($unknownMissionTypes) {
         $unknownMissionTypes = array_unique($unknownMissionTypes);
