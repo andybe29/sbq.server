@@ -53,6 +53,11 @@
         $response = SpaceBoteque::requestURL($url);
 
         if (empty(SpaceBoteque::$error)) {
+
+            if (0 == SpaceBoteque::$requestedURLs) {
+                SpaceBoteque::log2file($response['count'] . ' launches to process');
+            }
+
             foreach ($response['results'] as $currentLaunchNode) {
                 $currentMissionNode = $currentLaunchNode['mission'];
 
