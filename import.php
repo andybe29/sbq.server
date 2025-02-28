@@ -54,7 +54,7 @@
 
         if (empty(SpaceBoteque::$error)) {
 
-            if (0 == SpaceBoteque::$requestedURLs) {
+            if (1 == SpaceBoteque::$requestedURLs) {
                 SpaceBoteque::log2file($response['count'] . ' launches to process');
             }
 
