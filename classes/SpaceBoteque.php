@@ -70,18 +70,20 @@ class SpaceBoteque
 
         self::$error = null;
 
-        if ($proxy) {
-            $options = [
-                'http' => [
-                    'proxy'           => 'tcp://' . $proxy,
-                    'request_fulluri' => true
-                ]
-            ];
+        $options = [
+            'http' => [
+                'headers'    => implode("\r\n", ['Content-Type: application/json', 'Connection: close']),
+                'timeout'    => 10,
+                'user_agent' => 'SpaceBoteque',
+            ]
+        ];
 
-            $context = stream_context_create($options);
-        } else {
-            $context = null;
+        if ($proxy) {
+            $options['http']['proxy']           = 'tcp://' . $proxy;
+            $options['http']['request_fulluri'] = true;
         }
+
+        $context = stream_context_create($options);
 
         if (false !== ($data = file_get_contents($url, false, $context))) {
             $data = empty($data) ? [] : json_decode($data, true);

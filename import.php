@@ -27,7 +27,7 @@
 
     $requestQuery = [
         'limit'    => 25,
-        'mode'     => 'detailed',
+        'mode'     => 'normal',
         'offset'   => 0,
         'ordering' => 'net'
     ];
@@ -52,7 +52,9 @@
 
         $response = SpaceBoteque::requestURL($url);
 
-        if (empty(SpaceBoteque::$error)) {
+        if (SpaceBoteque::$error) {
+            echo json_encode(SpaceBoteque::$error, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE) . PHP_EOL;
+        } else {
 
             if (1 == SpaceBoteque::$requestedURLs) {
                 SpaceBoteque::log2file($response['count'] . ' launches to process');
@@ -136,12 +138,7 @@
             }
         }
 
-        if (SpaceBoteque::$error) {
-            echo json_encode(SpaceBoteque::$error, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE) . PHP_EOL;
-        }
-
         $requestQuery['offset'] += $requestQuery['limit'];
-
     } while (empty(SpaceBoteque::$error) and !empty($response['next']));
 
     if ($unknownMissionTypes) {
@@ -153,7 +150,7 @@
 
     if (SpaceBoteque::INSTANCE_SBQ == SpaceBoteque::$currentInstance) {
         SpaceBoteque::log2file($fname . ' => completed for ' . gmdate('H:i:s', time() - $begin));
-        SpaceBoteque::log2file(SpaceBoteque::$requestedURLs . ' completed');
+        SpaceBoteque::log2file(SpaceBoteque::$requestedURLs . ' requests completed');
     }
 
     flock($fp, LOCK_UN);
