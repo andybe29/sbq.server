@@ -26,10 +26,12 @@
     $requestURL = implode([SpaceBoteque::getCurrentAPIURL(), Launch::LLAPI_URI_UPCOMING]);
 
     $requestQuery = [
-        'limit'    => 25,
-        'mode'     => 'normal',
-        'offset'   => 0,
-        'ordering' => 'net'
+        'format'            => 'json',
+        'last_updated__gte' => date('Y-m-d\TH:i:s\Z', time() - 24 * 3600),
+        'limit'             => 25,
+        'mode'              => 'normal',
+        'offset'            => 0,
+        'ordering'          => '-last_updated',
     ];
 
     $unknownMissionTypes = [];
@@ -44,17 +46,11 @@
     $rocketConfiguration = new RocketConfiguration($sql);
 
     do {
-        $url = $requestURL . '?' . http_build_query($requestQuery);
-
-        if (SpaceBoteque::INSTANCE_DEV == SpaceBoteque::$currentInstance) {
-            echo $url . PHP_EOL;
-        }
-
-        $response = SpaceBoteque::requestURL($url);
+        $response = SpaceBoteque::requestURL($url = $requestURL . '?' . http_build_query($requestQuery));
 
         if (SpaceBoteque::$error) {
             echo json_encode(SpaceBoteque::$error, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE) . PHP_EOL;
-        } else {
+        } else if (isset($response['results'])) {
 
             if (1 == SpaceBoteque::$requestedURLs) {
                 SpaceBoteque::log2file($response['count'] . ' launches to process');
@@ -136,10 +132,13 @@
                 $launchData = Launch::parseNode($currentLaunchNode);
                 $launch->replace($launchData);
             }
+
+        } else if (!isset($response['next'])) {
+            $response['next'] = null;
         }
 
         $requestQuery['offset'] += $requestQuery['limit'];
-    } while (empty(SpaceBoteque::$error) and !empty($response['next']));
+    } while (empty(SpaceBoteque::$error) and $response['next']);
 
     if ($unknownMissionTypes) {
         $unknownMissionTypes = array_unique($unknownMissionTypes);

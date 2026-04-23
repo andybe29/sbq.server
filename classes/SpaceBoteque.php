@@ -73,7 +73,7 @@ class SpaceBoteque
         $options = [
             'http' => [
                 'headers'    => implode("\r\n", ['Content-Type: application/json', 'Connection: close']),
-                'timeout'    => 10,
+                'timeout'    => 30,
                 'user_agent' => 'SpaceBoteque',
             ]
         ];
@@ -85,18 +85,17 @@ class SpaceBoteque
 
         $context = stream_context_create($options);
 
-        if (false !== ($data = file_get_contents($url, false, $context))) {
-            $data = empty($data) ? [] : json_decode($data, true);
+        if ($data = file_get_contents($url, false, $context)) {
+            $data = json_decode($data, true);
 
             self::$requestedURLs ++;
         } else if ($proxy) {
             #
         } else {
-            # ошибки логировать только в случае запроса НЕ через прокси
             self::$error = new stdClass;
-            self::$error->method  = __METHOD__;
-            self::$error->message = 'file_get_contents';
-            self::$error->value   = $url;
+            self::$error->method = __METHOD__;
+            self::$error->data   = $data;
+            self::$error->value  = $url;
         }
 
         return $data;

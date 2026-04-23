@@ -8,7 +8,7 @@
                 $classname = str_replace('\\', DIRECTORY_SEPARATOR, $classname);
             }
 
-            require_once realpath(__DIR__) . '/classes/' . $classname . '.php';
+            require_once __DIR__ . '/classes/' . $classname . '.php';
         }
     );
 
