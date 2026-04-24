@@ -45,6 +45,8 @@
     $pad                 = new Pad($sql);
     $rocketConfiguration = new RocketConfiguration($sql);
 
+    $updatedLaunches     = 0;
+
     do {
         $response = SpaceBoteque::requestURL($url = $requestURL . '?' . http_build_query($requestQuery));
 
@@ -53,7 +55,7 @@
         } else if (isset($response['results'])) {
 
             if (1 == SpaceBoteque::$requestedURLs) {
-                SpaceBoteque::log2file($response['count'] . ' launches to process');
+                SpaceBoteque::log2file('Launches to process: ' . $response['count']);
             }
 
             foreach ($response['results'] as $currentLaunchNode) {
@@ -130,7 +132,10 @@
                 $rocketConfiguration->replace($rcData);
 
                 $launchData = Launch::parseNode($currentLaunchNode);
-                $launch->replace($launchData);
+
+                if ($launch->replace($launchData)) {
+                    $updatedLaunches ++;
+                }
             }
 
         } else if (!isset($response['next'])) {
@@ -149,7 +154,8 @@
 
     if (SpaceBoteque::INSTANCE_SBQ == SpaceBoteque::$currentInstance) {
         SpaceBoteque::log2file($fname . ' => completed for ' . gmdate('H:i:s', time() - $begin));
-        SpaceBoteque::log2file(SpaceBoteque::$requestedURLs . ' requests completed');
+        SpaceBoteque::log2file('Requests completed: ' . SpaceBoteque::$requestedURLs);
+        SpaceBoteque::log2file('Launches updated: ' . $updatedLaunches);
     }
 
     flock($fp, LOCK_UN);
