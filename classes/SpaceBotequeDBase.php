@@ -265,14 +265,14 @@ class SpaceBotequeDBase
                 (self::COLUMN_ID == $column and ($id = (int)$idValue) >= 0)
                 or
                 (
-                    self::COLUMN_UUID == $column
+                    in_array($column, [self::COLUMN_LAUNCH, self::COLUMN_UUID])
                     and
                     preg_match(self::REGEXP_UUID, $id = (string)$idValue)
                 )
             )
         ) {
             # ok
-            $id = (self::COLUMN_UUID == $column) ? $this->sql->varchar($id) : $id;
+            $id = in_array($column, [self::COLUMN_LAUNCH, self::COLUMN_UUID]) ? $this->sql->varchar($id) : $id;
         } else {
             SpaceBoteque::$error = new stdClass;
             SpaceBoteque::$error->method  = __METHOD__;
@@ -282,6 +282,7 @@ class SpaceBotequeDBase
         if (SpaceBoteque::$error) return false;
 
         $this->sql->str = 'SELECT * FROM ' . $table . ' WHERE ' . $column . ' = ' . $id;
+        echo $this->sql->str; exit;
         $this->sql->execute();
 
         if ($this->sql->err) {

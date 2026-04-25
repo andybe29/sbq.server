@@ -34,6 +34,17 @@ class Mission extends SpaceBotequeDBase
     }
 
     /**
+     * Чтение отдельной записи по полю launch
+     * @param string $launchUuid uuid пуска
+     * @return mixed запись либо false в случае фейла
+     *
+     */
+    public function launch(string $launchUuid = '')
+    {
+        return $this->_read(self::TABLE, parent::COLUMN_LAUNCH, $launchUuid);
+    }
+
+    /**
      * Чтение отдельной записи
      * @param int $incomeId id записи
      * @return mixed запись либо false в случае фейла
