@@ -62,11 +62,11 @@ class Launch extends SpaceBotequeDBase
 
     /**
      * Чтение отдельной записи
-     * @param int $incomeId id записи
+     * @param string $incomeId uuid записи
      * @return mixed запись либо false в случае фейла
      *
      */
-    public function read(int $incomeId = 0)
+    public function read(string $incomeId = '')
     {
         return $this->_read(self::TABLE, parent::COLUMN_UUID, $incomeId);
     }

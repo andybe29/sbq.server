@@ -167,8 +167,10 @@ class SpaceBotequeDBase
 
     /**
      * @const LIMIT дефолтное значение количества в наборе записей
+     * @const REGEXP_UUID регулярка на валидность uuid
      */
-    const LIMIT = 10;
+    const LIMIT       = 10;
+    const REGEXP_UUID = '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/';
 
     private $id, $uuid;
     private $sql;
@@ -262,7 +264,11 @@ class SpaceBotequeDBase
             and (
                 (self::COLUMN_ID == $column and ($id = (int)$idValue) >= 0)
                 or
-                (self::COLUMN_UUID == $column and mb_strlen($id = (string)$idValue))
+                (
+                    self::COLUMN_UUID == $column
+                    and
+                    preg_match(self::REGEXP_UUID, $id = (string)$idValue)
+                )
             )
         ) {
             # ok
