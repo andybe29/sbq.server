@@ -31,6 +31,11 @@ class Launch extends SpaceBotequeDBase
         parent::COLUMN_UPDATED
     ];
 
+    /**
+     * @const LIMIT дефолтное значение количества записей
+     */
+    const LIMIT = 10;
+
     public function __construct($sql)
     {
         parent::__construct($sql);
@@ -43,6 +48,21 @@ class Launch extends SpaceBotequeDBase
     public function all()
     {
         return $this->_all(self::TABLE, parent::COLUMN_UUID);
+    }
+
+    /**
+     * Количество предстоящих пусков
+     * @return mixed значение либо false в случае фейла
+     */
+    public function count()
+    {
+        $this->sql->str = 'SELECT COUNT(*) FROM launches WHERE net >= ' . $this->sql->varchar(simpleMySQLi::_now());
+        $this->sql->execute();
+
+        $value = $this->sql->rows ? (int)$this->sql->single() : ($this->sql->err ? false : 0);
+        $this->sql->free();
+
+        return $value;
     }
 
     /**
@@ -64,6 +84,27 @@ class Launch extends SpaceBotequeDBase
     public function replace(array $incomeData = [])
     {
         return $this->_replace(self::TABLE, $incomeData);
+    }
+
+    /**
+     * Список предстоящих пусков
+     * @param int $offset индекс первой записи
+     * @param int $limit  кол-во записей на выдачу
+     * @return mixed массив записей либо false в случае фейла
+     */
+    public function upcoming(int $offset = 0, int $limit = self::LIMIT)
+    {
+        if ($limit < 0 or $offset < 0) return false;
+
+        $this->sql->str   = [];
+        $this->sql->str[] = 'SELECT * FROM launches WHERE net >= ' . $this->sql->varchar(simpleMySQLi::_now());
+        $this->sql->str[] = 'LIMIT ' . $limit . ' OFFSET ' . $offset;
+        $this->sql->execute();
+
+        $data = $this->sql->rows ? $this->sql->all() : ($this->sql->err ? false : []);
+        $this->sql->free();
+
+        return $data ? array_map(['parent', 'typeCasting'], $data) : $data;
     }
 
     /**
