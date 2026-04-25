@@ -165,6 +165,11 @@ class SpaceBotequeDBase
         ]
     ];
 
+    /**
+     * @const LIMIT дефолтное значение количества в наборе записей
+     */
+    const LIMIT = 10;
+
     private $id, $uuid;
     private $sql;
 

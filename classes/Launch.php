@@ -31,11 +31,6 @@ class Launch extends SpaceBotequeDBase
         parent::COLUMN_UPDATED
     ];
 
-    /**
-     * @const LIMIT дефолтное значение количества записей
-     */
-    const LIMIT = 10;
-
     public function __construct($sql)
     {
         parent::__construct($sql);
@@ -92,7 +87,7 @@ class Launch extends SpaceBotequeDBase
      * @param int $limit  кол-во записей на выдачу
      * @return mixed массив записей либо false в случае фейла
      */
-    public function upcoming(int $offset = 0, int $limit = self::LIMIT)
+    public function upcoming(int $offset = 0, int $limit = parent::LIMIT)
     {
         if ($limit < 0 or $offset < 0) return false;
 
