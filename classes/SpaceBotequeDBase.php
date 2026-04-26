@@ -282,7 +282,6 @@ class SpaceBotequeDBase
         if (SpaceBoteque::$error) return false;
 
         $this->sql->str = 'SELECT * FROM ' . $table . ' WHERE ' . $column . ' = ' . $id;
-        echo $this->sql->str; exit;
         $this->sql->execute();
 
         if ($this->sql->err) {
