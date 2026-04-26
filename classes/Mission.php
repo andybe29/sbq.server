@@ -25,6 +25,26 @@ class Mission extends SpaceBotequeDBase
     }
 
     /**
+     * Список агентств, относящихся к заданной миссии
+     * @param int $incomeId id записи
+     * @return mixed массив записей либо false в случае фейла
+     */
+    public function agencies(int $incomeId = 0)
+    {
+        if ($incomeId <= 0) return false;
+
+        $this->sql->str   = [];
+        $this->sql->str[] = 'SELECT * FROM agencies WHERE id IN';
+        $this->sql->str[] = '(SELECT agency FROM missions2agencies WHERE mission = ' . $incomeId . ')';
+        $this->sql->execute();
+
+        $data = $this->sql->rows ? $this->sql->all() : ($this->sql->err ? false : []);
+        $this->sql->free();
+
+        return $data ? array_map(['parent', 'typeCasting'], $data) : $data;
+    }
+
+    /**
      * Список всех записей
      * @return mixed массив записей либо false в случае фейла
      */
