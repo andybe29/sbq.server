@@ -59,7 +59,7 @@ class API
         $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
 
         $response['result'] = array_map(function($key, $value) {
-                return ['id' => $key, 'type' => $value];
+                return ['id' => $key, 'name' => $value];
             }, array_keys(MissionType::MISSION_TYPES), array_values(MissionType::MISSION_TYPES)
         );
 
