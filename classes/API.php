@@ -18,14 +18,14 @@ class API
     const ERROR_PARSE_ERROR      = -32700;
 
     static $errors = [
-        self::ERROR_SERVER_ERROR     => 'Unknown Server Error',
-        self::ERROR_DBASE_ERROR      => 'Unknown Database Error',
+        self::ERROR_SERVER_ERROR     => 'Server Error',
+        self::ERROR_DBASE_ERROR      => 'Database Error',
 
         self::ERROR_INVALID_REQUEST  => 'Invalid Request',
         self::ERROR_METHOD_NOT_FOUND => 'Method Not Found',
         self::ERROR_INVALID_PARAMS   => 'Invalid Parameters',
         self::ERROR_INTERNAL_ERROR   => 'Internal Error',
-        self::ERROR_PARSE_ERROR      => 'Parsing Error',
+        self::ERROR_PARSE_ERROR      => 'Parse Error',
     ];
 
     /**
@@ -44,17 +44,45 @@ class API
     }
 
     /**
-     * Список типов миссий
-     * @param  array $params массив аргументов:
+     * Список статусов пусков
+     * @param  array $params массив аргументов: нет
      * @return array $response массив ответа на базе self::$response
      *      $response['result'] => [
      *          [
-     *              'id'   => id типа
-     *              'type' => значение
+     *              'id'          => id статуса пуска
+     *              'name'        => наименование
+     *              'abbrev'      => сокращённое наименование
+     *              'description' => описание
      *          ]
      *      ]
      */
-    public function missionTypes(array $params = [])
+    public function launchStatuses()
+    {
+        $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
+
+        $data = (new LaunchStatus($this->sql))->all();
+
+        if (false === $data) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        } else {
+            $response['result'] = $data;
+        }
+
+        return self::_checkResponse($response);
+    }
+
+    /**
+     * Список типов миссий
+     * @param  array $params массив аргументов: нет
+     * @return array $response массив ответа на базе self::$response
+     *      $response['result'] => [
+     *          [
+     *              'id'   => id типа миссии
+     *              'name' => наименование
+     *          ]
+     *      ]
+     */
+    public function missionTypes()
     {
         $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
 
@@ -125,3 +153,28 @@ class API
     }
 
 }
+
+    /**
+     *
+     * @param  array $params массив аргументов:
+     * @return array $response массив ответа на базе self::$response
+     *      $response['result'] => [
+     *      ]
+     */
+/*
+    public function (array $params = [])
+    {
+        $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
+
+        # проверка параметров
+        foreach ([] as $key) {
+            if (isset($response['error'])) continue;
+
+            $response['error'] = ($params[$key] < 0) ? API::ERROR_INVALID_PARAMS : null;
+        }
+
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        return self::_checkResponse($response);
+    }
+*/
