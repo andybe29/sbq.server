@@ -18,6 +18,10 @@
         <li><a href="#glossary">Краткий глоссарий</a></li>
         <li><a href="#description">Описание API</a></li>
         <li><a href="#errors">Сообщения об ошибках</a></li>
+    </ul>
+    <h5>Методы API</h5>
+    <ul>
+        <li><a href="#missionTypes"><samp>missionTypes</samp></a>: список типов миссий</li>
         <!--
         <li><a href="#"></a></li>
         -->
@@ -106,10 +110,34 @@
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 
+    <h4 id="missionTypes">missionTypes: список типов миссий</h4>
+    <p>Получение списка типов миссий</p>
+    <p>Передаваемые аргументы: нет</p>
+    <pre>{"jsonrpc":"2.0","id":1777472279134,"method":"missionTypes"}</pre>
+    <p>В <code>result</code> передаётся массив данных, каждый элемент соответствует одному типу миссии:</p>
+    <ul>
+        <li><code>int</code> <var>id</var> - id типа миссии</li>
+        <li><code>string</code> <var>name</var> - наименование типа миссии</li>
+    </ul>
+    <pre>{"jsonrpc":"2.0","id":1777472279134,"result":[{"id":2,"name":"Planetary Science"},...]}</pre>
+    <p class="text-right"><a href="#api">к содержанию</a></p>
+    <div class="divider"></div>
+
     <!--
     <h4 id=""></h4>
-    <p>
+    <p></p>
+    <p>Передаваемые аргументы:
+        <ul>
+            <li><code>int</code> <var></var> - </li>
+        </ul>
     </p>
+    <pre>{"jsonrpc":"2.0","method":"","params":{},"id":3}</pre>
+    <p>Получаемый массив данных в <code>result</code>:
+        <ul>
+            <li><code>boolean</code> <var></var> - </li>
+        </ul>
+    </p>
+    <pre>{"jsonrpc":"2.0","result":{},"id":3}</pre>
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
     -->
