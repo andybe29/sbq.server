@@ -21,8 +21,9 @@
     </ul>
     <h5>Методы API</h5>
     <ul>
-        <li><a href="#launchStatuses">launchStatuses</a>: список статусов пусков</li>
+        <li><a href="#launchStatuses"><samp>launchStatuses</samp></a>: список статусов пусков</li>
         <li><a href="#missionTypes"><samp>missionTypes</samp></a>: список типов миссий</li>
+        <li><a href="#orbits"><samp>orbits</samp></a>: список орбит</li>
         <!--
         <li><a href="#"></a>: </li>
         -->
@@ -115,7 +116,7 @@
     <p>Получение списка статусов пусков</p>
     <p>Передаваемые аргументы: нет</p>
     <pre>{"jsonrpc":"2.0","id":1777494943128,"method":"launchStatuses"}</pre>
-    <p>В <code>result</code> передаётся массив данных, каждый элемент соответствует одному типу миссии:</p>
+    <p>В <code>result</code> передаётся массив данных, каждый элемент соответствует одному статусу пуска:</p>
     <ul>
         <li><code>int</code> <var>id</var> - id статуса пуска</li>
         <li><code>string</code> <var>name</var> - наименование</li>
@@ -136,6 +137,20 @@
         <li><code>string</code> <var>name</var> - наименование</li>
     </ul>
     <pre>{"jsonrpc":"2.0","id":1777472279134,"result":[{"id":2,"name":"Planetary Science"},...]}</pre>
+    <p class="text-right"><a href="#api">к содержанию</a></p>
+    <div class="divider"></div>
+
+    <h4 id="orbits">orbits: список орбит</h4>
+    <p>Получение списка орюит</p>
+    <p>Передаваемые аргументы: нет</p>
+    <pre>{"jsonrpc":"2.0","id":1777637147064,"method":"orbits"}</pre>
+    <p>В <code>result</code> передаётся массив данных, каждый элемент соответствует одному виду орбиты:</p>
+    <ul>
+        <li><code>int</code> <var>id</var> - id орбиты</li>
+        <li><code>string</code> <var>name</var> - наименование</li>
+        <li><code>string</code> <var>abbrev</var> - сокращённое наименование</li>
+    </ul>
+    <pre>{"jsonrpc":"2.0","id":1777637147064,"result":[{"id":0,"name":"Elliptical Orbit","abbrev":"Elliptical"},...]}</pre>
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 
