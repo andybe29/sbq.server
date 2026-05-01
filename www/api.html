@@ -21,9 +21,10 @@
     </ul>
     <h5>Методы API</h5>
     <ul>
+        <li><a href="#launchStatuses">launchStatuses</a>: список статусов пусков</li>
         <li><a href="#missionTypes"><samp>missionTypes</samp></a>: список типов миссий</li>
         <!--
-        <li><a href="#"></a></li>
+        <li><a href="#"></a>: </li>
         -->
     </ul>
     <div class="divider"></div>
@@ -57,7 +58,7 @@
     <h4 id="errors">Сообщения об ошибках</h4>
     <table class="table table-hover">
         <thead>
-            <tr>
+            <tr class="bg-primary">
                 <th>code</th>
                 <th>message</th>
                 <th>примечание</th>
@@ -69,12 +70,12 @@
             </tr>
             <tr>
                 <td><code>-32000</code></td>
-                <td>Unknown Server Error</td>
+                <td>Server Error</td>
                 <td>Неправильное выполнение какого-либо внутреннего метода</td>
             </tr>
             <tr>
                 <td><code>-32001</code></td>
-                <td>Unknown Database Error</td>
+                <td>Database Error</td>
                 <td>Ошибка при выполнении sql-запроса</td>
             </tr>
             <tr class="bg-secondary">
@@ -93,20 +94,35 @@
             <tr>
                 <td><code>-32602</code></td>
                 <td>Invalid Parameters</td>
-                <td></td>
+                <td>Неверные параметры в запросе</td>
             </tr>
             <tr>
                 <td><code>-32603</code></td>
                 <td>Internal Error</td>
-                <td></td>
+                <td>Внутренняя ошибка</td>
             </tr>
             <tr>
                 <td><code>-32700</code></td>
-                <td>Parsing Error</td>
+                <td>Parse Error</td>
                 <td>Входные данные не являются валидной json-строкой</td>
             </tr>
         </tbody>
     </table>
+    <p class="text-right"><a href="#api">к содержанию</a></p>
+    <div class="divider"></div>
+
+    <h4 id="launchStatuses">launchStatuses: список статусов пусков</h4>
+    <p>Получение списка статусов пусков</p>
+    <p>Передаваемые аргументы: нет</p>
+    <pre>{"jsonrpc":"2.0","id":1777494943128,"method":"launchStatuses"}</pre>
+    <p>В <code>result</code> передаётся массив данных, каждый элемент соответствует одному типу миссии:</p>
+    <ul>
+        <li><code>int</code> <var>id</var> - id статуса пуска</li>
+        <li><code>string</code> <var>name</var> - наименование</li>
+        <li><code>string</code> <var>abbrev</var> - сокращённое наименование</li>
+        <li><code>string</code> <var>description</var> - описание</li>
+    </ul>
+    <pre>{"jsonrpc":"2.0","id":1777494943128,"result":[{"id":1,"name":"Go for Launch","abbrev":"Go","description":"..."},...]}</pre>
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 
@@ -117,7 +133,7 @@
     <p>В <code>result</code> передаётся массив данных, каждый элемент соответствует одному типу миссии:</p>
     <ul>
         <li><code>int</code> <var>id</var> - id типа миссии</li>
-        <li><code>string</code> <var>name</var> - наименование типа миссии</li>
+        <li><code>string</code> <var>name</var> - наименование</li>
     </ul>
     <pre>{"jsonrpc":"2.0","id":1777472279134,"result":[{"id":2,"name":"Planetary Science"},...]}</pre>
     <p class="text-right"><a href="#api">к содержанию</a></p>
