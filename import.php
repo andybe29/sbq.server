@@ -19,9 +19,7 @@
     # импорт
     require 'config.php';
 
-    if (SpaceBoteque::INSTANCE_SBQ == SpaceBoteque::$currentInstance) {
-        SpaceBoteque::log2file($fname . ' => has began');
-    }
+    SpaceBoteque::log2file($fname . ' => has began');
 
     $requestURL = implode([SpaceBoteque::getCurrentAPIURL(), Launch::LLAPI_URI_UPCOMING]);
 
@@ -67,7 +65,11 @@
                 }
 
                 # если тип миссии не соответствует SpaceBoteque - пропуск хода
-                if (!in_array($currentMissionNode['type'], MissionType::MISSION_TYPES)) continue;
+                if (
+                    SpaceBoteque::INSTANCE_SBQ == SpaceBoteque::$currentInstance
+                    and
+                    !in_array($currentMissionNode['type'], MissionType::MISSION_TYPES)
+                ) continue;
 
                 # to process
                 $json = json_encode($currentLaunchNode, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
@@ -80,10 +82,14 @@
                 error_log($json, 3, $flog);
 
                 # orbit
-                $orbit->replace($currentMissionNode['orbit']);
+                if (isset($currentMissionNode['orbit'])) {
+                    $orbit->replace($currentMissionNode['orbit']);
+                }
 
                 # status
-                $launchStatus->replace($currentLaunchNode['status']);
+                if (isset($currentLaunchNode['status'])) {
+                    $launchStatus->replace($currentLaunchNode['status']);
+                }
 
                 # mission
                 $missionData = Mission::parseNode($currentLaunchNode['id'], $currentMissionNode);
@@ -135,6 +141,8 @@
 
                 if ($launch->replace($launchData)) {
                     $updatedLaunches ++;
+                } else if (SpaceBoteque::$error) {
+                    SpaceBoteque::log2file(SpaceBoteque::$error);
                 }
             }
 
@@ -152,11 +160,9 @@
 
     endOfScript:
 
-    if (SpaceBoteque::INSTANCE_SBQ == SpaceBoteque::$currentInstance) {
-        SpaceBoteque::log2file($fname . ' => completed for ' . gmdate('H:i:s', time() - $begin));
-        SpaceBoteque::log2file('Requests completed: ' . SpaceBoteque::$requestedURLs);
-        SpaceBoteque::log2file('Launches updated: ' . $updatedLaunches);
-    }
+    SpaceBoteque::log2file($fname . ' => completed for ' . gmdate('H:i:s', time() - $begin));
+    SpaceBoteque::log2file('Requests completed: ' . SpaceBoteque::$requestedURLs);
+    SpaceBoteque::log2file('Launches updated: ' . $updatedLaunches);
 
     flock($fp, LOCK_UN);
     fclose($fp);
