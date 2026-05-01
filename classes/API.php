@@ -95,6 +95,33 @@ class API
     }
 
     /**
+     * Список целевых орбит
+     * @param  array $params массив аргументов: нет
+     * @return array $response массив ответа на базе self::$response
+     *      $response['result'] => [
+     *          [
+     *              'id'          => id статуса пуска
+     *              'name'        => наименование
+     *              'abbrev'      => сокращённое наименование
+     *          ]
+     *      ]
+     */
+    public function orbits()
+    {
+        $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
+
+        $data = (new Orbit($this->sql))->all();
+
+        if (false === $data) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        } else {
+            $response['result'] = $data;
+        }
+
+        return self::_checkResponse($response);
+    }
+
+    /**
      * проверка входящих данных
      * @param array распарсенный массив входных данных
      * @return boolean результат проверки (если false, то в self::$response готовый ответ с error)
@@ -153,28 +180,3 @@ class API
     }
 
 }
-
-    /**
-     *
-     * @param  array $params массив аргументов:
-     * @return array $response массив ответа на базе self::$response
-     *      $response['result'] => [
-     *      ]
-     */
-/*
-    public function (array $params = [])
-    {
-        $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
-
-        # проверка параметров
-        foreach ([] as $key) {
-            if (isset($response['error'])) continue;
-
-            $response['error'] = ($params[$key] < 0) ? API::ERROR_INVALID_PARAMS : null;
-        }
-
-        if (isset($response['error'])) return self::_checkResponse($response);
-
-        return self::_checkResponse($response);
-    }
-*/
