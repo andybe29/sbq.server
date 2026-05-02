@@ -51,7 +51,7 @@ class API
      * @return array $response массив ответа на базе self::$response
      *      $response['result'] => [
      *          'count'    => общее количество имеющихся записей о предстоящих пусках
-     *          'launches' => массив записей о о предстоящих пусках, каждая запись соответствует одному пуску
+     *          'launches' => массив записей о предстоящих пусках, каждая запись соответствует одному пуску
      *          [
      *              'uuid'    => uuid пуска
      *              'name'    => наименование
@@ -80,7 +80,7 @@ class API
     {
         $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
 
-        $params = array_map('int', $params);
+        $params = array_map('intval', $params);
 
         # проверка параметров
         foreach (['offset', 'limit'] as $key) {
@@ -199,6 +199,68 @@ class API
             $response['result'] = $data;
         }
 
+        return self::_checkResponse($response);
+    }
+
+    /**
+     * запускаемая миссия
+     * @param  array $params массив аргументов:
+     *          'uuid' => UUID пуска
+     * @return array $response массив ответа на базе self::$response
+     *      $response['result'] => [
+     *          [
+     *              'name' => наименование
+     *              'type' => тип миссии
+     *              [
+     *                  'id'    => id типа миссии
+     *                  'name'  => наименование
+     *              ]
+     *              'description' => описание
+     *              'agencies'    => агентства, к которым относится миссия
+     *              [
+     *                  'id'    => id типа миссии
+     *                  'name'  => наименование
+     *              ]
+     *          ]
+     *      ]
+     */
+    public function mission(array $params = [])
+    {
+        $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
+
+        if (
+            isset($params['uuid'])
+            and
+            preg_match(SpaceBotequeDBase::REGEXP_UUID, $params['uuid'])
+        ) {
+            # OK
+        } else {
+            $response['error'] = self::ERROR_INVALID_PARAMS;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        $mission = new Mission($this->sql);
+
+        $result = $mission->launch($params['uuid']);
+
+        if (false === $result) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        if (empty($result)) goto endOfMission;
+
+        $response['result'] = [
+            'name' => $result['name'],
+            'type' => [
+                'id' => $result['type'],
+                'name' => isset(MissionType::MISSION_TYPES[$result['type']]) ? MissionType::MISSION_TYPES[$result['type']] : null
+            ],
+            'description' => $result['description'],
+            'agencies' => []
+        ];
+
+        endOfMission:
         return self::_checkResponse($response);
     }
 
