@@ -44,7 +44,7 @@ class API
     }
 
     /**
-     * Список предстоящих пусков
+     * предстоящие пуски
      * @param  array $params массив аргументов:
      *          'offset' => индекс первой записи; необязательный аргумент, значение по умолчанию равно 0
      *          'limit'  => кол-во записей на выдачу; необязательный аргумент, значение по умолчанию равно 10
@@ -72,6 +72,7 @@ class API
      *                  'start' => открытие
      *                  'end'   => закрытие
      *              ]
+     *              'updated'   => дата и время последнего обновления
      *          ]
      *      ]
      */
@@ -147,22 +148,23 @@ class API
         foreach ($launches as $value) {
 
             $result['launches'][] = [
-                'uuid' => $value['uuid'],
-                'name' => $value['name'],
-                'status' => $value['launchStatus'],
-                'location' => [
+                'uuid'      => $value['uuid'],
+                'name'      => $value['name'],
+                'status'    => $value['launchStatus'],
+                'location'  => [
                     'id'   => $value['location'],
                     'name' => isset($locations[$value['location']]) ? $locations[$value['location']] : null
                 ],
-                'pad' => [
+                'pad'       => [
                     'id'   => $value['pad'],
                     'name' => isset($pads[$value['pad']]) ? $pads[$value['pad']] : null
                 ],
-                'net' => $value['net'],
-                'window' => [
+                'net'       => $value['net'],
+                'window'    => [
                     'start' => $value['windowStart'],
                     'end'   => $value['windowEnd']
-                ]
+                ],
+                'updated'   => 'updated'
             ];
 
         }
@@ -173,7 +175,7 @@ class API
     }
 
     /**
-     * Список статусов пусков
+     * статусы пусков
      * @param  array $params массив аргументов: нет
      * @return array $response массив ответа на базе self::$response
      *      $response['result'] => [
@@ -201,7 +203,7 @@ class API
     }
 
     /**
-     * Список типов миссий
+     * типы миссий
      * @param  array $params массив аргументов: нет
      * @return array $response массив ответа на базе self::$response
      *      $response['result'] => [
