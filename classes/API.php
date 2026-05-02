@@ -44,6 +44,135 @@ class API
     }
 
     /**
+     * Список предстоящих пусков
+     * @param  array $params массив аргументов:
+     *          'offset' => индекс первой записи; необязательный аргумент, значение по умолчанию равно 0
+     *          'limit'  => кол-во записей на выдачу; необязательный аргумент, значение по умолчанию равно 10
+     * @return array $response массив ответа на базе self::$response
+     *      $response['result'] => [
+     *          'count'    => общее количество имеющихся записей о предстоящих пусках
+     *          'launches' => массив записей о о предстоящих пусках, каждая запись соответствует одному пуску
+     *          [
+     *              'uuid'    => uuid пуска
+     *              'name'    => наименование
+     *              'status'  => статус пуска
+     *              'location' => космодром
+     *              [
+     *                  'id'    => id космодрома
+     *                  'name'  => наименование
+     *              ]
+     *              'pad'       => стартовая площадка
+     *              [
+     *                  'id'    => id стартовой площадки
+     *                  'name'  => наименование
+     *              ]
+     *              'net'       => время пуска
+     *              'window'    => пусковое окно
+     *              [
+     *                  'start' => открытие
+     *                  'end'   => закрытие
+     *              ]
+     *          ]
+     *      ]
+     */
+    public function launches(array $params = [])
+    {
+        $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
+
+        $params = array_map('int', $params);
+
+        # проверка параметров
+        foreach (['offset', 'limit'] as $key) {
+            if (isset($response['error'])) continue;
+
+            if (isset($params[$key])) {
+                if ($params[$key] >= 0) {
+                    # OK
+                } else {
+                    $response['error'] = self::ERROR_INVALID_PARAMS;
+                }
+            } else {
+                # значения по умолчанию
+                $params[$key] = ('limit' == $key) ? SpaceBotequeDBase::LIMIT : 0;
+            }
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        $launch = new Launch($this->sql);
+
+        # массив для $response['result']
+        $result = [
+            'count'    => 0,
+            'launches' => []
+        ];
+
+        # кол-во предстоящих пусков всего
+        $result['count'] = $launch->count();
+
+        if (false === $result['count']) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        if (0 == $result['count']) goto endOfLaunches;
+
+        $launches = $launch->upcoming($params['offset'], $params['limit']);
+
+        if (false === $launches) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        # космодромы
+        $locations = (new Location($this->sql))->all();
+
+        if (false === $locations) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        $locations = array_combine(array_column($locations, 'id'), array_column($locations, 'name'));
+
+        # стартовые площадки
+        $pads = (new Pad($this->sql))->all();
+
+        if (false === $pads) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        $pads = array_combine(array_column($pads, 'id'), array_column($pads, 'name'));
+
+        # подготовка $result['launches']
+        foreach ($launches as $value) {
+
+            $result['launches'][] = [
+                'uuid' => $value['uuid'],
+                'name' => $value['name'],
+                'status' => $value['launchStatus'],
+                'location' => [
+                    'id'   => $value['location'],
+                    'name' => isset($locations[$value['location']]) ? $locations[$value['location']] : null
+                ],
+                'pad' => [
+                    'id'   => $value['pad'],
+                    'name' => isset($pads[$value['pad']]) ? $pads[$value['pad']] : null
+                ],
+                'net' => $value['net'],
+                'window' => [
+                    'start' => $value['windowStart'],
+                    'end'   => $value['windowEnd']
+                ]
+            ];
+
+        }
+
+        endOfLaunches:
+        $response['result'] = $result;
+        return self::_checkResponse($response);
+    }
+
+    /**
      * Список статусов пусков
      * @param  array $params массив аргументов: нет
      * @return array $response массив ответа на базе self::$response
@@ -90,33 +219,6 @@ class API
                 return ['id' => $key, 'name' => $value];
             }, array_keys(MissionType::MISSION_TYPES), array_values(MissionType::MISSION_TYPES)
         );
-
-        return self::_checkResponse($response);
-    }
-
-    /**
-     * Список целевых орбит
-     * @param  array $params массив аргументов: нет
-     * @return array $response массив ответа на базе self::$response
-     *      $response['result'] => [
-     *          [
-     *              'id'          => id статуса пуска
-     *              'name'        => наименование
-     *              'abbrev'      => сокращённое наименование
-     *          ]
-     *      ]
-     */
-    public function orbits()
-    {
-        $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
-
-        $data = (new Orbit($this->sql))->all();
-
-        if (false === $data) {
-            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
-        } else {
-            $response['result'] = $data;
-        }
 
         return self::_checkResponse($response);
     }
