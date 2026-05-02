@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="spectre.css">
     <style>
         .text-nowrap { white-space: nowrap; }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 <body>
@@ -21,11 +25,11 @@
     </ul>
     <h5>Методы API</h5>
     <ul>
-        <li><a href="#launchStatuses"><samp>launchStatuses</samp></a>: список статусов пусков</li>
-        <li><a href="#missionTypes"><samp>missionTypes</samp></a>: список типов миссий</li>
-        <li><a href="#orbits"><samp>orbits</samp></a>: список орбит</li>
+        <li><a href="#launchStatuses"><samp>launchStatuses</samp></a>: статусы пусков</li>
+        <li><a href="#missionTypes"><samp>missionTypes</samp></a>: типы миссий</li>
+        <li><a href="#launches"><samp>launches</samp></a>: предстоящие пуски</li>
         <!--
-        <li><a href="#"></a>: </li>
+        <li><a href="#"><samp></samp></a>: </li>
         -->
     </ul>
     <div class="divider"></div>
@@ -36,7 +40,6 @@
         <li><var>mission</var> - миссия (полезная нагрузка) пуска (<var>launch</var>)</li>
         <li><var>launchStatus</var> - текущий статус пуска</li>
         <li><var>missionType</var> - тип миссии</li>
-        <li><var>orbit</var> - орбита, на которую производится пуск миссии</li>
         <li><var>agency</var> - космическое агентство</li>
         <li><var>location</var> - космодром</li>
         <li><var>pad</var> - стартовая площадка</li>
@@ -112,7 +115,7 @@
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 
-    <h4 id="launchStatuses">launchStatuses: список статусов пусков</h4>
+    <h4 id="launchStatuses">launchStatuses: статусы пусков</h4>
     <p>Получение списка статусов пусков</p>
     <p>Передаваемые аргументы: нет</p>
     <pre>{"jsonrpc":"2.0","id":1777494943128,"method":"launchStatuses"}</pre>
@@ -127,7 +130,7 @@
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 
-    <h4 id="missionTypes">missionTypes: список типов миссий</h4>
+    <h4 id="missionTypes">missionTypes: типы миссий</h4>
     <p>Получение списка типов миссий</p>
     <p>Передаваемые аргументы: нет</p>
     <pre>{"jsonrpc":"2.0","id":1777472279134,"method":"missionTypes"}</pre>
@@ -140,17 +143,53 @@
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 
-    <h4 id="orbits">orbits: список орбит</h4>
-    <p>Получение списка орюит</p>
-    <p>Передаваемые аргументы: нет</p>
-    <pre>{"jsonrpc":"2.0","id":1777637147064,"method":"orbits"}</pre>
-    <p>В <code>result</code> передаётся массив данных, каждый элемент соответствует одному виду орбиты:</p>
-    <ul>
-        <li><code>int</code> <var>id</var> - id орбиты</li>
-        <li><code>string</code> <var>name</var> - наименование</li>
-        <li><code>string</code> <var>abbrev</var> - сокращённое наименование</li>
-    </ul>
-    <pre>{"jsonrpc":"2.0","id":1777637147064,"result":[{"id":0,"name":"Elliptical Orbit","abbrev":"Elliptical"},...]}</pre>
+    <h4 id="launches">launches: предстоящие пуски</h4>
+    <p>Список предстоящих пусков, отсортированный по дате и времени от ближайшего и дальше</p>
+    <p>Передаваемые аргументы:
+        <ul>
+            <li><code>int</code> <var>offset</var> - индекс первой записи; необязательный аргумент, значение по умолчанию равно 0</li>
+            <li><code>int</code> <var>limit</var> - кол-во записей на запрос; необязательный аргумент, значение по умолчанию равно 10</li>
+        </ul>
+    </p>
+    <pre>{"jsonrpc":"2.0","id":1777731925688,"method":"launches"}</pre>
+    <pre>{"jsonrpc":"2.0","id":1777742020322,"method":"launches","params":{"offset":0,"limit":6}}</pre>
+    <p>Получаемый массив данных в <code>result</code>:
+        <ul>
+            <li><code>int</code> <var>count</var> - общее количество имеющихся записей о предстоящих пусках</li>
+            <li>
+                <code>array</code> <var>launches</var> - массив записей о предстоящих пусках, каждая запись соответствует одному пуску:
+                <ul>
+                    <li><code>string</code> <var>uuid</var> - uuid пуска</li>
+                    <li><code>string</code> <var>name</var> - наименование</li>
+                    <li><code>int</code> <var>status</var> - статус пуска (см. <a href="#launchStatuses">статусы пусков</a>)</li>
+                    <li>
+                        <code>array</code> <var>location</var> - космодром:
+                        <ul>
+                            <li><code>int</code> <var>id</var> - id космодрома</li>
+                            <li><code>string</code> <var>name</var> - наименование</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <code>array</code> <var>pad</var> - стартовая площадка:
+                        <ul>
+                            <li><code>int</code> <var>id</var> - id стартовой площадки</li>
+                            <li><code>string</code> <var>name</var> - наименование</li>
+                        </ul>
+                    </li>
+                    <li><code>int</code> <var>net</var> - дата и время пуска (значение передаётся в unix time)</li>
+                    <li>
+                        <code>array</code> <var>window</var> - пусковое окно (значения передаются в unix time):
+                        <ul>
+                            <li><code>int</code> <var>start</var> - открытие</li>
+                            <li><code>int</code> <var>end</var> - закрытие</li>
+                        </ul>
+                    </li>
+                    <li><code>int</code> <var>updated</var> - дата и время последнего обновления (значение передаётся в unix time)</li>
+                </ul>
+            </li>
+        </ul>
+    </p>
+    <pre>{"jsonrpc":"2.0","id":1777742020322,"result":{"count":34,"launches":[{"uuid":"b31313da-ee5d-42b2-9a27-20cc18105276","name":"Vega-C | Solar wind Magnetosphere Ionosphere Link Explorer (SMILE)","status":1,"location":{"id":13,"name":"Guiana Space Centre, French Guiana"},"pad":{"id":34,"name":"Ariane Launch Area 1 (ELV)"},"net":1779162720,"window":{"start":1779162720,"end":1779162720},"updated":1776966775},...]}</pre>
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 
