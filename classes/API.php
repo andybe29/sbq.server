@@ -44,6 +44,44 @@ class API
     }
 
     /**
+     * космическое агентство
+     * @param  array $params массив аргументов:
+     *          'id' => id агентства
+     * @return array $response массив ответа на базе self::$response
+     *      $response['result'] => [
+     *          'name'        => наименование
+     *          'abbrev'      => аббревиатура
+     *          'description' => описание
+     *      ]
+     */
+    public function agency(array $params = [])
+    {
+        $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
+
+        if (isset($params['id']) and 0 < ($params['id'] = (int)$params['id'])) {
+            # OK
+        } else {
+            $response['error'] = self::ERROR_INVALID_PARAMS;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        $result = (new Agency($this->sql))->read($params['id']);
+
+        if (false === $result) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        $response['result'] = [
+            'name'        => $result['name'],
+            'abbrev'      => $result['abbrev'],
+            'description' => $result['description']
+        ];
+
+        return self::_checkResponse($response);
+    }
+
+    /**
      * предстоящие пуски
      * @param  array $params массив аргументов:
      *          'offset' => индекс первой записи; необязательный аргумент, значение по умолчанию равно 0
