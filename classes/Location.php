@@ -36,6 +36,26 @@ class Location extends SpaceBotequeDBase
     }
 
     /**
+     * Список пусковых площадок космодрома
+     * @param int $incomeId id записи
+     * @return mixed массив записей либо false в случае фейла
+     */
+    public function pads(int $incomeId = 0)
+    {
+        if ($incomeId <= 0) return false;
+
+        $this->sql->str   = [];
+        $this->sql->str[] = 'SELECT * FROM pads WHERE id IN';
+        $this->sql->str[] = '(SELECT pad FROM launches WHERE location = ' . $incomeId . ')';
+        $this->sql->execute();
+
+        $data = $this->sql->rows ? $this->sql->all() : ($this->sql->err ? false : []);
+        $this->sql->free();
+
+        return $data ? array_map(['parent', 'typeCasting'], $data) : $data;
+    }
+
+    /**
      * Чтение отдельной записи
      * @param int $incomeId id записи
      * @return mixed запись либо false в случае фейла
