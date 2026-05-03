@@ -30,8 +30,7 @@
         <li><a href="#launches"><samp>launches</samp></a>: предстоящие пуски</li>
         <li><a href="#mission"><samp>mission</samp></a>: запускаемая миссия</li>
         <li><a href="#agency"><samp>agency</samp></a>: космическое агентство</li>
-        <li><a href="#"><samp></samp></a>: </li>
-        <li><a href="#"><samp></samp></a>: </li>
+        <li><a href="#location"><samp>location</samp></a>: космодром</li>
     </ul>
     <div class="divider"></div>
 
@@ -244,24 +243,35 @@
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 
-    <!--
-    <h4 id=""></h4>
+    <h4 id="location">location: космодром</h4>
     <p></p>
     <p>Передаваемые аргументы:
         <ul>
-            <li><code>int</code> <var></var> - </li>
+            <li><code>int</code> <var>id</var> - id космодрома</li>
         </ul>
     </p>
-    <pre>{"jsonrpc":"2.0","method":"","params":{},"id":3}</pre>
+    <pre>{"jsonrpc":"2.0","id":1777825399617,"method":"location","params":{"id":13}}</pre>
     <p>Получаемый массив данных в <code>result</code>:
         <ul>
-            <li><code>boolean</code> <var></var> - </li>
+            <li><code>string</code> <var>name</var> - наименование</li>
+            <li><code>string</code> <var>description</var> - описание</li>
+            <li><code>float</code> <var>latitude</var> - широта</li>
+            <li><code>float</code> <var>longitude</var> - долгота</li>
+            <li>
+                <code>array</code> <var>pads</var> - список пусковых площадок космодрома; массив записей, каждая из которых относится к отдельной пусковой площадке
+                <ul>
+                    <li><code>string</code> <var>name</var> - наименование</li>
+                    <li><code>string</code> <var>description</var> - описание</li>
+                    <li><code>float</code> <var>latitude</var> - широта</li>
+                    <li><code>float</code> <var>longitude</var> - долгота</li>
+                </ul>
+            </li>
         </ul>
     </p>
-    <pre>{"jsonrpc":"2.0","result":{},"id":3}</pre>
+    <pre>{"jsonrpc":"2.0","id":1777825399617,"result":{"name":"Guiana Space Centre, French Guiana","description":"...","latitude":5.169,"longitude":-52.6903,"pads":[{"name":"Ariane Launch Area 1 (ELV)","description":"...","latitude":5.236,"longitude":-52.775},...]}}</pre>
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
-    -->
+
 </div>
 </body>
 </html>
