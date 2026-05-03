@@ -218,8 +218,10 @@ class API
      *              'description' => описание
      *              'agencies'    => агентства, к которым относится миссия
      *              [
-     *                  'id'    => id типа миссии
-     *                  'name'  => наименование
+     *                  'id'          => id агентства
+     *                  'name'        => наименование
+     *                  'abbrev'      => аббревиатура
+     *                  'description' => описание
      *              ]
      *          ]
      *      ]
@@ -251,14 +253,30 @@ class API
         if (empty($result)) goto endOfMission;
 
         $response['result'] = [
-            'name' => $result['name'],
-            'type' => [
+            'name'        => $result['name'],
+            'type'        => [
                 'id' => $result['type'],
                 'name' => isset(MissionType::MISSION_TYPES[$result['type']]) ? MissionType::MISSION_TYPES[$result['type']] : null
             ],
             'description' => $result['description'],
-            'agencies' => []
+            'agencies'    => []
         ];
+
+        $agencies = $mission->agencies($result['id']);
+
+        if (false === $agencies) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        foreach ($agencies as $value) {
+            $response['result']['agencies'][] = [
+                'id'          => $value['id'],
+                'name'        => $value['name'],
+                'abbrev'      => $value['abbrev'],
+                'description' => $value['description']
+            ];
+        }
 
         endOfMission:
         return self::_checkResponse($response);
