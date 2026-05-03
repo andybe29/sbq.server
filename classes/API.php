@@ -241,6 +241,72 @@ class API
     }
 
     /**
+     * космодром
+     * @param  array $params массив аргументов:
+     *          'id' => id космодрома
+     * @return array $response массив ответа на базе self::$response
+     *      $response['result'] => [
+     *          'name'        => наименование
+     *          'description' => описание
+     *          'latitude'    => широта
+     *          'longitude'   => долгота
+     *          'pads'        => список пусковых площадок космодрома
+     *          [
+     *              'name'        => наименование
+     *              'description' => описание
+     *              'latitude'    => широта
+     *              'longitude'   => долгота
+     *          ]
+     *      ]
+     */
+    public function location(array $params = [])
+    {
+        $response = self::$response; # ['jsonrpc' => self::JSON_RPC_VERSION, 'id' => null]
+
+        if (isset($params['id']) and 0 < ($params['id'] = (int)$params['id'])) {
+            # OK
+        } else {
+            $response['error'] = self::ERROR_INVALID_PARAMS;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        $location = new Location($this->sql);
+
+        $result = $location->read($params['id']);
+
+        if (false === $result) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        $response['result'] = [
+            'name'        => $result['name'],
+            'description' => $result['description'],
+            'latitude'    => $result['latitude'],
+            'longitude'   => $result['longitude'],
+            'pads'        => []
+        ];
+
+        $pads = $location->pads($result['id']);
+
+        if (false === $pads) {
+            $response['error'] = $this->sql->err ? self::ERROR_DBASE_ERROR : self::ERROR_SERVER_ERROR;
+        }
+        if (isset($response['error'])) return self::_checkResponse($response);
+
+        foreach ($pads as $value) {
+            $response['result']['pads'][] = [
+                'name'        => $value['name'],
+                'description' => $value['description'],
+                'latitude'    => $value['latitude'],
+                'longitude'   => $value['longitude']
+            ];
+        }
+
+        return self::_checkResponse($response);
+    }
+
+    /**
      * запускаемая миссия
      * @param  array $params массив аргументов:
      *          'uuid' => UUID пуска
@@ -288,8 +354,6 @@ class API
         }
         if (isset($response['error'])) return self::_checkResponse($response);
 
-        if (empty($result)) goto endOfMission;
-
         $response['result'] = [
             'name'        => $result['name'],
             'type'        => [
@@ -316,7 +380,6 @@ class API
             ];
         }
 
-        endOfMission:
         return self::_checkResponse($response);
     }
 
