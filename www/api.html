@@ -29,9 +29,9 @@
         <li><a href="#missionTypes"><samp>missionTypes</samp></a>: типы миссий</li>
         <li><a href="#launches"><samp>launches</samp></a>: предстоящие пуски</li>
         <li><a href="#mission"><samp>mission</samp></a>: запускаемая миссия</li>
-        <!--
+        <li><a href="#agency"><samp>agency</samp></a>: космическое агентство</li>
         <li><a href="#"><samp></samp></a>: </li>
-        -->
+        <li><a href="#"><samp></samp></a>: </li>
     </ul>
     <div class="divider"></div>
 
@@ -117,7 +117,6 @@
     <div class="divider"></div>
 
     <h4 id="launchStatuses">launchStatuses: статусы пусков</h4>
-    <p>Получение списка статусов пусков</p>
     <p>Передаваемые аргументы: нет</p>
     <pre>{"jsonrpc":"2.0","id":1777494943128,"method":"launchStatuses"}</pre>
     <p>В <code>result</code> передаётся массив данных, каждый элемент соответствует одному статусу пуска:</p>
@@ -132,7 +131,6 @@
     <div class="divider"></div>
 
     <h4 id="missionTypes">missionTypes: типы миссий</h4>
-    <p>Получение списка типов миссий</p>
     <p>Передаваемые аргументы: нет</p>
     <pre>{"jsonrpc":"2.0","id":1777472279134,"method":"missionTypes"}</pre>
     <p>В <code>result</code> передаётся массив данных, каждый элемент соответствует одному типу миссии:</p>
@@ -195,7 +193,6 @@
     <div class="divider"></div>
 
     <h4 id="mission">mission: запускаемая миссия</h4>
-    <p>Информация о миссии пуска</p>
     <p>Передаваемые аргументы:
         <ul>
             <li><code>string</code> <var>uuid</var> - UUID пуска</li>
@@ -225,6 +222,25 @@
         </ul>
     </p>
     <pre>{"jsonrpc":"2.0","id":1777801786645,"result":{"name":"Solar wind Magnetosphere Ionosphere Link Explorer (SMILE)","type":{"id":3,"name":"Astrophysics"},"description":"...","agencies":[{"id":27,"name":"European Space Agency","abbrev":"ESA","description":""},...]}}</pre>
+    <p class="text-right"><a href="#api">к содержанию</a></p>
+    <div class="divider"></div>
+
+    <h4 id="agency">agency: космическое агентство</h4>
+    <p></p>
+    <p>Передаваемые аргументы:
+        <ul>
+            <li><code>int</code> <var>id</var> - id агентства</li>
+        </ul>
+    </p>
+    <pre>{"jsonrpc":"2.0","id":1777817725265,"method":"agency","params":{"id":44}}</pre>
+    <p>Получаемый массив данных в <code>result</code>:
+        <ul>
+            <li><code>string</code> <var>name</var> - наименование</li>
+            <li><code>string</code> <var>abbrev</var> - аббревиатура</li>
+            <li><code>string</code> <var>description</var> - описание</li>
+        </ul>
+    </p>
+    <pre>{"jsonrpc":"2.0","id":1777817725265,"result":{"name":"National Aeronautics and Space Administration","abbrev":"NASA","description":"..."}}</pre>
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 
