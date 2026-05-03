@@ -25,7 +25,7 @@
 
     $requestQuery = [
         'format'            => 'json',
-        'last_updated__gte' => date('Y-m-d\TH:i:s\Z', time() - 24 * 3600),
+        'last_updated__gte' => date('Y-m-d\TH:i:s\Z', time() - 6 * 3600),
         'limit'             => 25,
         'mode'              => 'normal',
         'offset'            => 0,

@@ -73,7 +73,7 @@ class SpaceBoteque
         $options = [
             'http' => [
                 'headers'    => implode("\r\n", ['Content-Type: application/json', 'Connection: close']),
-                'timeout'    => 30,
+                'timeout'    => 60,
                 'user_agent' => 'SpaceBoteque',
             ]
         ];
@@ -85,8 +85,11 @@ class SpaceBoteque
 
         $context = stream_context_create($options);
 
-        if ($data = file_get_contents($url, false, $context)) {
-            $data = json_decode($data, true);
+        if (
+            $data = file_get_contents($url, false, $context)
+            and
+            $data = json_decode($data, true)
+        ) {
 
             self::$requestedURLs ++;
         } else if ($proxy) {
