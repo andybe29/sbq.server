@@ -28,6 +28,7 @@
         <li><a href="#launchStatuses"><samp>launchStatuses</samp></a>: статусы пусков</li>
         <li><a href="#missionTypes"><samp>missionTypes</samp></a>: типы миссий</li>
         <li><a href="#launches"><samp>launches</samp></a>: предстоящие пуски</li>
+        <li><a href="#mission"><samp>mission</samp></a>: запускаемая миссия</li>
         <!--
         <li><a href="#"><samp></samp></a>: </li>
         -->
@@ -190,6 +191,40 @@
         </ul>
     </p>
     <pre>{"jsonrpc":"2.0","id":1777742020322,"result":{"count":34,"launches":[{"uuid":"b31313da-ee5d-42b2-9a27-20cc18105276","name":"Vega-C | Solar wind Magnetosphere Ionosphere Link Explorer (SMILE)","status":1,"location":{"id":13,"name":"Guiana Space Centre, French Guiana"},"pad":{"id":34,"name":"Ariane Launch Area 1 (ELV)"},"net":1779162720,"window":{"start":1779162720,"end":1779162720},"updated":1776966775},...]}</pre>
+    <p class="text-right"><a href="#api">к содержанию</a></p>
+    <div class="divider"></div>
+
+    <h4 id="mission">mission: запускаемая миссия</h4>
+    <p>Информация о миссии пуска</p>
+    <p>Передаваемые аргументы:
+        <ul>
+            <li><code>string</code> <var>uuid</var> - UUID пуска</li>
+        </ul>
+    </p>
+    <pre>{"jsonrpc":"2.0","id":1777801786645,"method":"mission","params":{"uuid":"b31313da-ee5d-42b2-9a27-20cc18105276"}}</pre>
+    <p>Получаемый массив данных в <code>result</code>:
+        <ul>
+            <li><code>string</code> <var>name</var> - наименование</li>
+            <li>
+                <code>array</code> <var>type</var> - тип миссии:
+                <ul>
+                    <li><code>int</code> <var>id</var> - id типа миссии</li>
+                    <li><code>string</code> <var>name</var> - наименование</li>
+                </ul>
+            </li>
+            <li><code>string</code> <var>description</var> - описание</li>
+            <li>
+                <code>array</code> <var>agencies</var> - агентства, к которым относится миссия; массив записей, каждая из которых относится к отдельному агентству
+                <ul>
+                    <li><code>int</code> <var>id</var> - id агентства</li>
+                    <li><code>string</code> <var>name</var> - наименование</li>
+                    <li><code>string</code> <var>abbrev</var> - аббревиатура</li>
+                    <li><code>string</code> <var>description</var> - описание</li>
+                </ul>
+            </li>
+        </ul>
+    </p>
+    <pre>{"jsonrpc":"2.0","id":1777801786645,"result":{"name":"Solar wind Magnetosphere Ionosphere Link Explorer (SMILE)","type":{"id":3,"name":"Astrophysics"},"description":"...","agencies":[{"id":27,"name":"European Space Agency","abbrev":"ESA","description":""},...]}}</pre>
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 
