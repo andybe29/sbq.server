@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.30, for Linux (x86_64)
 --
--- Host: u12543.mysql.masterhost.ru    Database: u12543_dev
+-- Host: u12543.mysql.masterhost.ru    Database: u12543_sbq
 -- ------------------------------------------------------
 -- Server version	5.7.30-log
 
@@ -27,7 +27,7 @@ CREATE TABLE `agencies` (
   `name` varchar(255) DEFAULT NULL,
   `abbrev` varchar(255) DEFAULT NULL,
   `countryCode` varchar(3) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `description` varchar(2048) DEFAULT NULL,
   `infoURL` varchar(255) DEFAULT NULL,
   `wikiURL` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -87,7 +87,7 @@ CREATE TABLE `locations` (
   `id` int(10) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `countryCode` varchar(3) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `description` varchar(2048) DEFAULT NULL,
   `latitude` decimal(10,6) DEFAULT NULL,
   `longitude` decimal(10,6) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -157,7 +157,7 @@ CREATE TABLE `pads` (
   `id` int(10) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `countryCode` varchar(3) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `description` varchar(2048) DEFAULT NULL,
   `latitude` decimal(10,6) DEFAULT NULL,
   `longitude` decimal(10,6) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -207,4 +207,4 @@ CREATE TABLE `rocketConfigurations` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-26 22:48:23
+-- Dump completed on 2026-05-03 13:17:04
