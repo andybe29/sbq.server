@@ -73,7 +73,7 @@ class SpaceBoteque
         $options = [
             'http' => [
                 'headers'    => implode("\r\n", ['Content-Type: application/json', 'Connection: close']),
-                'timeout'    => 60,
+                'timeout'    => 120,
                 'user_agent' => 'SpaceBoteque',
             ]
         ];
