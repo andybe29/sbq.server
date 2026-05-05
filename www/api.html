@@ -206,13 +206,7 @@
     <p>Получаемый массив данных в <code>result</code>:
         <ul>
             <li><code>string</code> <var>name</var> - наименование</li>
-            <li>
-                <code>array</code> <var>type</var> - тип миссии:
-                <ul>
-                    <li><code>int</code> <var>id</var> - id типа миссии</li>
-                    <li><code>string</code> <var>name</var> - наименование</li>
-                </ul>
-            </li>
+            <li><code>int</code> <var>type</var> - тип миссии (см. <a href="#missionTypes">типы миссий</a>)</li>
             <li><code>string</code> <var>description</var> - описание</li>
             <li>
                 <code>array</code> <var>agencies</var> - агентства, к которым относится миссия; массив записей, каждая из которых относится к отдельному агентству
@@ -225,7 +219,7 @@
             </li>
         </ul>
     </p>
-    <pre>{"jsonrpc":"2.0","id":1777801786645,"result":{"name":"Solar wind Magnetosphere Ionosphere Link Explorer (SMILE)","type":{"id":3,"name":"Astrophysics"},"description":"...","agencies":[{"id":27,"name":"European Space Agency","abbrev":"ESA","description":""},...]}}</pre>
+    <pre>{"jsonrpc":"2.0","id":1777801786645,"result":{"name":"Solar wind Magnetosphere Ionosphere Link Explorer (SMILE)","type":3,"description":"...","agencies":[{"id":27,"name":"European Space Agency","abbrev":"ESA","description":""},...]}}</pre>
     <p class="text-right"><a href="#api">к содержанию</a></p>
     <div class="divider"></div>
 

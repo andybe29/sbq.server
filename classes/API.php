@@ -315,10 +315,6 @@ class API
      *          [
      *              'name' => наименование
      *              'type' => тип миссии
-     *              [
-     *                  'id'    => id типа миссии
-     *                  'name'  => наименование
-     *              ]
      *              'description' => описание
      *              'agencies'    => агентства, к которым относится миссия
      *              [
@@ -356,10 +352,7 @@ class API
 
         $response['result'] = [
             'name'        => $result['name'],
-            'type'        => [
-                'id' => $result['type'],
-                'name' => isset(MissionType::MISSION_TYPES[$result['type']]) ? MissionType::MISSION_TYPES[$result['type']] : null
-            ],
+            'type'        => $result['type'],
             'description' => $result['description'],
             'agencies'    => []
         ];
